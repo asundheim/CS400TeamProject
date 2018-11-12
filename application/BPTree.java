@@ -1,3 +1,5 @@
+package application;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -9,7 +11,7 @@ import java.util.Random;
 /**
  * Implementation of a B+ tree to allow efficient access to
  * many different indexes of a large data set. 
- * BPTree objects are created for each type of index
+ * application.BPTree objects are created for each type of index
  * needed by the program.  BPTrees provide an efficient
  * range search as compared to other types of data structures
  * due to the ability to perform log_m N lookups and
@@ -46,7 +48,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
     
     /*
      * (non-Javadoc)
-     * @see BPTreeADT#insert(java.lang.Object, java.lang.Object)
+     * @see application.BPTreeADT#insert(java.lang.Object, java.lang.Object)
      */
     @Override
     public void insert(K key, V value) {
@@ -56,7 +58,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
     
     /*
      * (non-Javadoc)
-     * @see BPTreeADT#rangeSearch(java.lang.Object, java.lang.String)
+     * @see application.BPTreeADT#rangeSearch(java.lang.Object, java.lang.String)
      */
     @Override
     public List<V> rangeSearch(K key, String comparator) {
@@ -148,7 +150,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         
         /*
          * (non-Javadoc)
-         * @see BPTree#rangeSearch(java.lang.Object, java.lang.String)
+         * @see application.BPTree#rangeSearch(java.lang.Object, java.lang.String)
          */
         abstract List<V> rangeSearch(K key, String comparator);
 
@@ -308,26 +310,26 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
     
     
     /**
-     * Contains a basic test scenario for a BPTree instance.
+     * Contains a basic test scenario for a application.BPTree instance.
      * It shows a simple example of the use of this class
      * and its related types.
      * 
      * @param args
      */
     public static void main(String[] args) {
-        // create empty BPTree with branching factor of 3
+        // create empty application.BPTree with branching factor of 3
         BPTree<Double, Double> bpTree = new BPTree<>(3);
 
         // create a pseudo random number generator
         Random rnd1 = new Random();
 
-        // some value to add to the BPTree
+        // some value to add to the application.BPTree
         Double[] dd = {0.0d, 0.5d, 0.2d, 0.8d};
 
-        // build an ArrayList of those value and add to BPTree also
+        // build an ArrayList of those value and add to application.BPTree also
         // allows for comparing the contents of the ArrayList 
-        // against the contents and functionality of the BPTree
-        // does not ensure BPTree is implemented correctly
+        // against the contents and functionality of the application.BPTree
+        // does not ensure application.BPTree is implemented correctly
         // just that it functions as a data structure with
         // insert, rangeSearch, and toString() working.
         List<Double> list = new ArrayList<>();
@@ -341,4 +343,4 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         System.out.println("Filtered values: " + filteredValues.toString());
     }
 
-} // End of class BPTree
+} // End of class application.BPTree

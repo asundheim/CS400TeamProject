@@ -1,3 +1,5 @@
+package application;
+
 import java.util.List;
 
 /**
@@ -36,16 +38,16 @@ public interface FoodDataADT<F extends FoodItem> {
      * Gets all the food items that have name containing the substring.
      * 
      * Example:
-     *     All FoodItem
+     *     All application.FoodItem
      *         51c38f5d97c3e6d3d972f08a,Similac_FormulaSoyforDiarrheaReadytoFeed,calories,100,fat,0,carbohydrate,0,fiber,0,protein,3
      *         556540ff5d613c9d5f5935a9,Stewarts_PremiumDarkChocolatewithMintCookieCrunch,calories,280,fat,18,carbohydrate,34,fiber,3,protein,3
      *     Substring: soy
-     *     Filtered FoodItem
+     *     Filtered application.FoodItem
      *         51c38f5d97c3e6d3d972f08a,Similac_FormulaSoyforDiarrheaReadytoFeed,calories,100,fat,0,carbohydrate,0,fiber,0,protein,3
      * 
      * Note:
      *     1. Matching should be CASE-INSENSITIVE.
-     *     2. The whole substring should be present in the name of FoodItem object.
+     *     2. The whole substring should be present in the name of application.FoodItem object.
      *     3. substring will be strictly alphanumeric (a-zA-Z0-9_)
      * 
      * @param substring substring to be searched
@@ -87,7 +89,7 @@ public interface FoodDataADT<F extends FoodItem> {
     
     /**
      * Gets the list of all food items.
-     * @return list of FoodItem
+     * @return list of application.FoodItem
      */
     public List<FoodItem> getAllFoodItems();
     

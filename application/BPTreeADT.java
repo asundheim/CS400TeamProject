@@ -1,3 +1,5 @@
+package application;
+
 import java.util.List;
 
 /**
@@ -19,7 +21,7 @@ public interface BPTreeADT<K, V> {
     
     
     /**
-     * Gets the values that satisfy the given range 
+     * Gets the values that satisfy the given range
      * search arguments.
      * 
      * Value of comparator can be one of these: 
