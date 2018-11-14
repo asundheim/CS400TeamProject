@@ -27,6 +27,7 @@ public class FoodItem {
     public FoodItem(String id, String name) {
         this.id = id;
         this.name = name;
+        nutrients = new HashMap<String, Double>();
     }
     
     /**
