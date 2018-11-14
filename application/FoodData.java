@@ -19,7 +19,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     
     
     /**
-     * Public constructor test
+     * Public constructor
      * 
      */
     public FoodData() {
