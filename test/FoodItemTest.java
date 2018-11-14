@@ -1,5 +1,5 @@
-package application;
-
+package test;
+import application.FoodItem;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,7 +8,7 @@ import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class FoodItemTests {
+public class FoodItemTest {
     private FoodItem foodItem;
     @Before
     public void setUp() {
