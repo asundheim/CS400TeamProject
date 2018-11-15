@@ -72,5 +72,4 @@ public class FoodItem {
     public double getNutrientValue(String name) {
         return this.nutrients.getOrDefault(name, 0.0);
     }
-    
 }
