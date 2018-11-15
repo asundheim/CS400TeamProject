@@ -43,6 +43,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                "Illegal branching factor: " + branchingFactor);
         }
         this.branchingFactor = branchingFactor;
+        this.root = null;
     }
     
     
