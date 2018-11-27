@@ -123,7 +123,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * Package constructor
          */
         Node() {
-            // TODO : Complete
+            this.keys = new ArrayList<K>();
         }
         
         /**
@@ -151,7 +151,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         
         /*
          * (non-Javadoc)
-         * @see application.BPTree#rangeSearch(java.lang.Object, java.lang.String)
+         * @see application.BPTreeADT#rangeSearch(java.lang.Object, java.lang.String)
          */
         abstract List<V> rangeSearch(K key, String comparator);
 
@@ -185,7 +185,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         InternalNode() {
             super();
-            // TODO : Complete
+            this.children = new ArrayList<Node>();
         }
         
         /**
@@ -193,8 +193,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#getFirstLeafKey()
          */
         K getFirstLeafKey() {
-            // TODO : Complete
-            return null;
+            return this.children.get(0).getFirstLeafKey();
         }
         
         /**
@@ -259,7 +258,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         LeafNode() {
             super();
-            // TODO : Complete
+            this.values = new ArrayList<V>();
         }
         
         
