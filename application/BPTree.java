@@ -53,10 +53,32 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
      */
     @Override
     public void insert(K key, V value) {
-        // TODO : Complete
+        if (this.root == null) {
+            this.root = new LeafNode();
+            this.root.insert(key, value);
+        } else {
+            LeafNode toInsert = recFindNodeToInsert(key, this.root);
+            toInsert.insert(key, value);
+        }
     }
-    
-    
+
+    public LeafNode recFindNodeToInsert(K key, Node node) {
+        if (node instanceof BPTree.LeafNode) {
+            return (LeafNode)node;
+        } else {
+            if (key.compareTo(node.keys.get(0)) < 0) {
+                return recFindNodeToInsert(key, ((InternalNode) node).children.get(0));
+            }
+            for (int i = 0; i < node.keys.size() - 1; i++) {
+                int j = key.compareTo(node.keys.get(i));
+                int k = key.compareTo(node.keys.get(i + 1));
+                if (j > 0 && (k < 0 || k == 0)) {
+                    return recFindNodeToInsert(key, ((InternalNode) node).children.get(i + 1));
+                }
+            }
+            return recFindNodeToInsert(key, ((InternalNode) node).children.get(((InternalNode) node).children.size() - 1));
+        }
+    }
     /*
      * (non-Javadoc)
      * @see application.BPTreeADT#rangeSearch(java.lang.Object, java.lang.String)
@@ -118,7 +140,8 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         
         // List of keys
         List<K> keys;
-        
+
+        InternalNode parent;
         /**
          * Package constructor
          */
@@ -193,7 +216,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#getFirstLeafKey()
          */
         K getFirstLeafKey() {
-            return this.children.get(0).getFirstLeafKey();
+            return null;
         }
         
         /**
@@ -210,7 +233,11 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#insert(java.lang.Comparable, java.lang.Object)
          */
         void insert(K key, V value) {
-            // TODO : Complete
+
+        }
+
+        void insert(K key, Node node) {
+
         }
         
         /**
@@ -267,8 +294,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#getFirstLeafKey()
          */
         K getFirstLeafKey() {
-            // TODO : Complete
-            return null;
+            return this.keys.get(0);
         }
         
         /**
@@ -276,8 +302,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#isOverflow()
          */
         boolean isOverflow() {
-            // TODO : Complete
-            return false;
+            return this.keys.size() == branchingFactor;
         }
         
         /**
@@ -285,16 +310,46 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#insert(Comparable, Object)
          */
         void insert(K key, V value) {
-            // TODO : Complete
+            if (!this.isOverflow()) {
+                if (key.compareTo(this.getFirstLeafKey()) < 0) {
+                    this.keys.add(0, key);
+                    this.values.add(0, value);
+                }
+                if (key.compareTo(this.keys.get(this.keys.size() - 1)) > 0) {
+                    this.keys.add(this.keys.size(), key);
+                    this.values.add(this.values.size(), value);
+                }
+                for (int i = 0; i < this.keys.size() - 1; i++) {
+                    if (key.compareTo(this.keys.get(i)) > 0 && key.compareTo(this.keys.get(i + 1)) < 1) {
+                        this.keys.add(i + 1, key);
+                    }
+                }
+            } else {
+                if (this.parent == null) {
+                    this.parent = new InternalNode();
+                }
+                LeafNode newNode = split();
+                newNode.previous = this;
+                newNode.parent = this.parent;
+                this.next = newNode;
+                this.parent.insert(newNode.getFirstLeafKey(), newNode);
+            }
+
         }
         
         /**
          * (non-Javadoc)
          * @see BPTree.Node#split()
          */
-        Node split() {
-            // TODO : Complete
-            return null;
+        LeafNode split() {
+            LeafNode node = new LeafNode();
+            int size = values.size();
+            for (int i = size - 1; i >= size / 2; i--) {
+                node.insert(this.keys.get(i), this.values.get(i));
+                keys.remove(i);
+                values.remove(i);
+            }
+            return node;
         }
         
         /**
