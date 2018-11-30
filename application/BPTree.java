@@ -262,11 +262,14 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                 // This needs to be fixed
                 if (this.parent == null) {
                     this.parent = new InternalNode();
+                    this.parent.children.add(this);
                     root = this.parent;
                 }
                 InternalNode newNode = split();
                 newNode.parent = this.parent;
-                this.parent.insert(newNode.getFirstLeafKey(), newNode);
+                K midKey = newNode.getFirstLeafKey();
+                newNode.keys.remove(midKey);
+                this.parent.insert(midKey, newNode);
             }
         }
         
