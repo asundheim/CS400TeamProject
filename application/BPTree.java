@@ -239,21 +239,27 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 
         void insert(K key, Node node) {
             if (!this.isOverflow()) {
-                if (key.compareTo(this.getFirstLeafKey()) < 0) {
-                    this.keys.add(0, key);
-                    this.children.add(0, node);
-                }
-                if (key.compareTo(this.keys.get(this.keys.size() - 1)) > 0) {
-                    this.keys.add(this.keys.size(), key);
-                    this.children.add(this.children.size(), node);
-                }
-                for (int i = 0; i < this.keys.size() - 1; i++) {
-                    if (key.compareTo(this.keys.get(i)) > 0 && key.compareTo(this.keys.get(i + 1)) < 1) {
-                        this.keys.add(i + 1, key);
-                        this.children.add(i + 1, node);
+                if (this.keys.size() == 0) {
+                    this.keys.add(key);
+                    this.children.add(node);
+                } else {
+                    if (key.compareTo(this.getFirstLeafKey()) < 0) {
+                        this.keys.add(0, key);
+                        this.children.add(0, node);
+                    }
+                    if (key.compareTo(this.keys.get(this.keys.size() - 1)) > 0) {
+                        this.keys.add(this.keys.size(), key);
+                        this.children.add(this.children.size(), node);
+                    }
+                    for (int i = 0; i < this.keys.size() - 1; i++) {
+                        if (key.compareTo(this.keys.get(i)) > 0 && key.compareTo(this.keys.get(i + 1)) < 1) {
+                            this.keys.add(i + 1, key);
+                            this.children.add(i + 1, node);
+                        }
                     }
                 }
             } else {
+                // This needs to be fixed
                 if (this.parent == null) {
                     this.parent = new InternalNode();
                     root = this.parent;
@@ -265,6 +271,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         }
         
         /**
+         * This needs to be fixed
          * (non-Javadoc)
          * @see BPTree.Node#split()
          */
@@ -346,24 +353,31 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         void insert(K key, V value) {
         	//if node doesn't need to split
             if (!this.isOverflow()) {
-                if (key.compareTo(this.getFirstLeafKey()) < 0) {
-                    this.keys.add(0, key);
-                    this.values.add(0, value);
-                }
-                if (key.compareTo(this.keys.get(this.keys.size() - 1)) > 0) {
-                    this.keys.add(this.keys.size(), key);
-                    this.values.add(this.values.size(), value);
-                }
-                for (int i = 0; i < this.keys.size() - 1; i++) {
-                    if (key.compareTo(this.keys.get(i)) > 0 && key.compareTo(this.keys.get(i + 1)) < 1) {
-                        this.keys.add(i + 1, key);
-                        this.values.add(i + 1, value);
+                if (this.keys.size() == 0) {
+                    this.keys.add(key);
+                    this.values.add(value);
+                } else {
+                    if (key.compareTo(this.getFirstLeafKey()) < 0) {
+                        this.keys.add(0, key);
+                        this.values.add(0, value);
+                    }
+                    if (key.compareTo(this.keys.get(this.keys.size() - 1)) > 0) {
+                        this.keys.add(this.keys.size(), key);
+                        this.values.add(this.values.size(), value);
+                    }
+                    for (int i = 0; i < this.keys.size() - 1; i++) {
+                        if (key.compareTo(this.keys.get(i)) > 0 && key.compareTo(this.keys.get(i + 1)) < 1) {
+                            this.keys.add(i + 1, key);
+                            this.values.add(i + 1, value);
+                        }
                     }
                 }
+
             //if node needs to split
             } else {
                 if (this.parent == null) {
                     this.parent = new InternalNode();
+                    this.parent.children.add(this);
                     root = this.parent;
                 }
                 LeafNode newNode = split();
