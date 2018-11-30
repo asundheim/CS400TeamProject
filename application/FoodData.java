@@ -1,7 +1,11 @@
 package application;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class represents the backend for managing all 
@@ -33,7 +37,20 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public void loadFoodItems(String filePath) {
-        // TODO : Complete
+        try {
+            this.foodItemList = Files.lines(new File(filePath).toPath())
+                    .map(x -> x.split(","))
+                    .map(x -> {
+                        FoodItem food = new FoodItem(x[0], x[1]);
+                        for (int i = 2; i < x.length; i+=2) {
+                            food.addNutrient(x[i], Double.parseDouble(x[i + 1]));
+                        }
+                        return food;
+                    })
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /*
