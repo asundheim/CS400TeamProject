@@ -3,6 +3,7 @@ package application;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +28,8 @@ public class FoodData implements FoodDataADT<FoodItem> {
      * 
      */
     public FoodData() {
-        // TODO : Complete
+        this.foodItemList = new ArrayList<>();
+        this.indexes = new HashMap<>();
     }
 
     
@@ -43,11 +45,19 @@ public class FoodData implements FoodDataADT<FoodItem> {
                     .map(x -> {
                         FoodItem food = new FoodItem(x[0], x[1]);
                         for (int i = 2; i < x.length; i+=2) {
-                            food.addNutrient(x[i], Double.parseDouble(x[i + 1]));
+                            food.addNutrient(x[i].toLowerCase(), Double.parseDouble(x[i + 1]));
                         }
                         return food;
                     })
                     .collect(Collectors.toList());
+            this.foodItemList.forEach((FoodItem foodItem) -> {
+                foodItem.getNutrients().forEach((String nutrient, Double value) -> {
+                    if (!this.indexes.containsKey(nutrient)) {
+                        this.indexes.put(nutrient, new BPTree<>(10));
+                    }
+                    this.indexes.get(nutrient).insert(value, foodItem);
+                });
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -59,8 +69,10 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public List<FoodItem> filterByName(String substring) {
-        // TODO : Complete
-        return null;
+        return this.foodItemList
+                .stream()
+                .filter(x -> x.getName().contains(substring))
+                .collect(Collectors.toList());
     }
 
     /*
@@ -69,8 +81,16 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public List<FoodItem> filterByNutrients(List<String> rules) {
-        // TODO : Complete
-        return null;
+        List<List<FoodItem>> matches = rules.stream()
+                .map(rule -> rule.split(" "))
+                .map(rule -> this.indexes.get(rule[0]).rangeSearch(Double.parseDouble(rule[2]), rule[1]))
+                .collect(Collectors.toList());
+        if (matches.size() > 0) {
+            matches.forEach(list -> matches.get(0).retainAll(list));
+            return matches.get(0);
+        } else {
+            return new ArrayList<FoodItem>();
+        }
     }
 
     /*
@@ -79,7 +99,10 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public void addFoodItem(FoodItem foodItem) {
-        // TODO : Complete
+        foodItem.getNutrients().forEach((String nutrient, Double value) -> {
+            this.indexes.get(nutrient).insert(value, foodItem);
+        });
+        this.foodItemList.add(foodItem);
     }
 
     /*
@@ -88,8 +111,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public List<FoodItem> getAllFoodItems() {
-        // TODO : Complete
-        return null;
+        return this.foodItemList;
     }
 
     /**
@@ -99,7 +121,29 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public void saveFoodItems(String filename) {
-
+        try {
+            Files.write(new File(filename).toPath(),
+                    this.foodItemList
+                        .stream()
+                        .map(item -> {
+                            ArrayList<String> nutrients = new ArrayList<>();
+                            nutrients.add("calories");
+                            nutrients.add("" + item.getNutrientValue("calories"));
+                            nutrients.add("fat");
+                            nutrients.add("" + item.getNutrientValue("fat"));nutrients.add("fat");
+                            nutrients.add("carbohydrate");
+                            nutrients.add("" + item.getNutrientValue("carbohydrate"));
+                            nutrients.add("fiber");
+                            nutrients.add("" + item.getNutrientValue("fiber"));
+                            nutrients.add("protein");
+                            nutrients.add("" + item.getNutrientValue("protein"));
+                            return item.getID() + " " + item.getName() + "," + String.join(",", nutrients);
+                        })
+                        .collect(Collectors.toList())
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
