@@ -92,7 +92,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         if(root == null) {
         	return new ArrayList<V>();
         }
-        return root.rangeSearch(key, comparator);
+        return recFindNodeToInsert(key, root).rangeSearch(key, comparator);
     }
     
     
@@ -271,7 +271,6 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         }
         
         /**
-         * This needs to be fixed
          * (non-Javadoc)
          * @see BPTree.Node#split()
          */
@@ -414,35 +413,39 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         	if(key == null || comparator == null) {
         		return toReturn;
         	}
-        	if(comparator.equals("==")) {
-        		for(int i = 0; i < keys.size(); i++) {
-        			if(keys.get(i).compareTo(key) == 0) {
-        				toReturn.add(values.get(i));
-        			}
-        		}
-        	}
-        	else if(comparator.equals(">=")) {
-        	    LeafNode node = this;
-                while (node != null) {
-                    for (int i = 0; i < node.keys.size(); i++) {
-                        if (node.keys.get(i).compareTo(key) >= 0) {
+            switch (comparator) {
+                case "==":
+                    for (int i = 0; i < keys.size(); i++) {
+                        if (keys.get(i).compareTo(key) == 0) {
                             toReturn.add(values.get(i));
                         }
                     }
-                    node = node.next;
-                }
-        	}
-        	else if(comparator.equals("<=")) {
-        	    LeafNode node = this;
-        	    while (node != null) {
-                    for(int i = 0; i < keys.size(); i++) {
-                        if(keys.get(i).compareTo(key) <= 0) {
-                            toReturn.add(values.get(i));
+                    break;
+                case ">=": {
+                    LeafNode node = this;
+                    while (node != null) {
+                        for (int i = 0; i < node.keys.size(); i++) {
+                            if (node.keys.get(i).compareTo(key) >= 0) {
+                                toReturn.add(values.get(i));
+                            }
                         }
+                        node = node.next;
                     }
-                    node = node.previous;
+                    break;
                 }
-        	}
+                case "<=": {
+                    LeafNode node = this;
+                    while (node != null) {
+                        for (int i = 0; i < keys.size(); i++) {
+                            if (keys.get(i).compareTo(key) <= 0) {
+                                toReturn.add(values.get(i));
+                            }
+                        }
+                        node = node.previous;
+                    }
+                    break;
+                }
+            }
         	return toReturn;
         }
         
