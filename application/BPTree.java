@@ -89,8 +89,10 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             !comparator.contentEquals("==") && 
             !comparator.contentEquals("<=") )
             return new ArrayList<V>();
-        // TODO : Complete
-        return null;
+        if(root == null) {
+        	return new ArrayList<V>();
+        }
+        return root.rangeSearch(key, comparator);
     }
     
     
@@ -216,7 +218,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#getFirstLeafKey()
          */
         K getFirstLeafKey() {
-            return null;
+            return children.get(0).keys.get(0);
         }
         
         /**
