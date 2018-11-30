@@ -10,7 +10,7 @@ import java.util.List;
  * @author sapan (sapan@cs.wisc.edu)
  */
 public class FoodData implements FoodDataADT<FoodItem> {
-    
+
     // List of all the food items.
     private List<FoodItem> foodItemList;
 
@@ -19,13 +19,13 @@ public class FoodData implements FoodDataADT<FoodItem> {
     
     
     /**
-     * Public constructor test
+     * Public constructor
      * 
      */
     public FoodData() {
         // TODO : Complete
     }
-    
+
     
     /*
      * (non-Javadoc)

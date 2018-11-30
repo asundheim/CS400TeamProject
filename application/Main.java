@@ -9,10 +9,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -37,7 +40,7 @@ public class Main extends Application{
 	public void start(Stage arg0) throws Exception {
 		// Set up window
 		BorderPane root = new BorderPane();
-		Scene scene1 = new Scene(root, 900, 900);
+		Scene scene1 = new Scene(root, 975, 700);
 		scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		
 		// Banner at top of window
@@ -169,13 +172,6 @@ public class Main extends Application{
 		Label carbs = new Label("Carbs(g): ");		TextField carbsField = new TextField();
 		Button addFoodButton = new Button("ADD FOOD");
 		
-		HBox nameBox = new HBox(3);
-		HBox proteinBox = new HBox(3);
-		HBox caloriesBox = new HBox(3);
-		HBox fiberBox = new HBox(3);
-		HBox fatBox = new HBox(3);
-		HBox carbsBox = new HBox(3);
-		
 		labelBox.getChildren().addAll(name, protein, calories, fiber, fat, carbs);
 		fieldBox.getChildren().addAll(nameField, proteinField, caloriesField, 
 				fiberField, fatField, carbsField);
@@ -192,7 +188,76 @@ public class Main extends Application{
 		root.setLeft(leftPane);
 		////////////////////////////
 		
+		// Center Pane ///////////
+		HBox centerPane = new HBox(20);
+		centerPane.setId("centerpane");
 		
+		///////// FOOD LIST ////////////
+		VBox foodListBox = new VBox(5);
+		Label foodListLabel = new Label("FOOD LIST:");
+		foodListLabel.setId("Header");
+		
+		ScrollPane foodScroll = new ScrollPane();
+		ObservableList<String> foodList = FXCollections.observableList(new ArrayList<String>());
+		// TODO: DELETE WHEN FINISHING
+		foodList.add("La enchilada");
+		foodList.add("La hamburgesa");
+		foodList.add("El aguacate");
+		foodList.add("El arroz");
+		foodList.add("Las arvejas");
+		foodList.add("El bistec");
+		foodList.add("Los camarones");
+		foodList.add("La cebolla");
+		foodList.add("Los dulces");
+		foodList.add("El flan");
+		foodList.add("La galleta");
+		
+		ListView<String> list = new ListView<String>(foodList);
+		foodScroll.setContent(list);
+		foodScroll.setPrefHeight(400);
+		foodScroll.setPrefWidth(230);
+		
+		HBox slButtonBox = new HBox(80);
+		Button saveButton = new Button("SAVE");
+		Button loadButton = new Button("LOAD");
+		slButtonBox.getChildren().addAll(saveButton, loadButton);
+		
+		foodListBox.getChildren().addAll(foodListLabel, foodScroll, slButtonBox);
+		////////////////////////////////
+		
+		///////// ADD BUTTON ///////////
+		VBox addBox = new VBox();
+		addBox.setPadding(new Insets(150,0,0,0));
+		Button addButton = new Button("ADD");
+		addBox.getChildren().add(addButton);
+		////////////////////////////////
+		
+		////////// MEAL LIST ///////////
+		VBox mealListBox = new VBox(5);
+		Label mealListLabel = new Label("MEAL LIST:");
+		mealListLabel.setId("Header");
+		
+		ScrollPane mealScroll = new ScrollPane();
+		ObservableList<String> mealList = FXCollections.observableList(new ArrayList<String>());
+		ListView<String> list2 = new ListView<String>(mealList);
+		//TODO: DELETE WHEN DONE
+		mealList.add("Los dulces");
+		mealList.add("La galleta");
+		mealList.add("El flan");
+		mealScroll.setContent(list2);
+		mealScroll.setPrefHeight(400);
+		mealScroll.setMaxWidth(230);
+		
+		HBox raButtonBox = new HBox(10);
+		Button removeButton = new Button("REMOVE");
+		Button analyzeButton = new Button("ANALYZE");
+		raButtonBox.getChildren().addAll(removeButton, analyzeButton);
+		mealListBox.getChildren().addAll(mealListLabel, mealScroll, raButtonBox);
+		////////////////////////////////
+		
+		centerPane.getChildren().addAll(foodListBox, addBox, mealListBox);
+		root.setCenter(centerPane);
+		//////////////////////////
 		
 		arg0.setScene(scene1);
 		arg0.show();
