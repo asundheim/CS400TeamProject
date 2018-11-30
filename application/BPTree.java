@@ -254,8 +254,13 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#rangeSearch(java.lang.Comparable, java.lang.String)
          */
         List<V> rangeSearch(K key, String comparator) {
-            // TODO : Complete
-            return null;
+        	List<V> toReturn = new ArrayList<V>();
+        	for(Node n : children) {
+        		for(V v : n.rangeSearch(key, comparator)) {
+        			toReturn.add(v);
+        		}
+        	}
+            return toReturn;
         }
     
     } // End of class InternalNode
