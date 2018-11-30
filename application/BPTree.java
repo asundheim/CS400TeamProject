@@ -408,19 +408,26 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         		}
         	}
         	else if(comparator.equals(">=")) {
-        		for(int i = 0; i < keys.size(); i++) {
-        			if(keys.get(i).compareTo(key) >= 0) {
-        				toReturn.add(values.get(i));
-        			}
-        		}
-        		
+        	    LeafNode node = this;
+                while (node != null) {
+                    for (int i = 0; i < node.keys.size(); i++) {
+                        if (node.keys.get(i).compareTo(key) >= 0) {
+                            toReturn.add(values.get(i));
+                        }
+                    }
+                    node = node.next;
+                }
         	}
         	else if(comparator.equals("<=")) {
-        		for(int i = 0; i < keys.size(); i++) {
-        			if(keys.get(i).compareTo(key) <= 0) {
-        				toReturn.add(values.get(i));
-        			}
-        		}
+        	    LeafNode node = this;
+        	    while (node != null) {
+                    for(int i = 0; i < keys.size(); i++) {
+                        if(keys.get(i).compareTo(key) <= 0) {
+                            toReturn.add(values.get(i));
+                        }
+                    }
+                    node = node.previous;
+                }
         	}
         	return toReturn;
         }
