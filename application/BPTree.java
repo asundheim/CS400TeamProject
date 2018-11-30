@@ -218,7 +218,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#getFirstLeafKey()
          */
         K getFirstLeafKey() {
-            return children.get(0).keys.get(0);
+            return keys.get(0);
         }
         
         /**
@@ -260,11 +260,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                 }
                 InternalNode newNode = split();
                 newNode.parent = this.parent;
-                K midKey = newNode.getFirstLeafKey();
-                newNode.keys.remove(0);
-                newNode.children.remove(0);
                 this.parent.insert(newNode.getFirstLeafKey(), newNode);
-
             }
         }
         
