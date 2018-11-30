@@ -30,6 +30,10 @@
 	-fx-min-width: 200;
 }
 
+#centerpane {
+	-fx-padding: 40, 0, 0, 40;
+}
+
 .button {
 	-fx-text-fill: white;
 	-fx-font: bold 18 Times;
