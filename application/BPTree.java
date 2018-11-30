@@ -1,12 +1,7 @@
 package application;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Random;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * Implementation of a B+ tree to allow efficient access to
@@ -226,7 +221,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#isOverflow()
          */
         boolean isOverflow() {
-            return this.keys.size() == branchingFactor;
+            return this.children.size() == branchingFactor;
         }
         
         /**
@@ -279,12 +274,15 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         InternalNode split() {
             InternalNode node = new InternalNode();
-            int size = children.size();
-            for (int i = size - 1; i >= size / 2; i--) {
+            int size = this.children.size();
+            for (int i = size - 1 ;i >= size / 2; i--) {
                 //split right half of node into 'node'
-                node.insert(this.keys.get(i), this.children.get(i));
-                keys.remove(i);
-                children.remove(i);
+                node.children.add(0, this.children.get(i));
+                this.children.remove(i);
+            }
+            for (int i = size - 2; i >= (size - 1) / 2; i--) {
+                node.keys.add(0, this.keys.get(i));
+                this.keys.remove(i);
             }
             return node;
         }

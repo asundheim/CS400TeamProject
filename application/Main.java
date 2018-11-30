@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -38,6 +39,7 @@ public class Main extends Application{
 
 	@Override
 	public void start(Stage arg0) throws Exception {
+	    foodData = new FoodData();
 		// Set up window
 		BorderPane root = new BorderPane();
 		Scene scene1 = new Scene(root, 975, 700);
@@ -199,19 +201,7 @@ public class Main extends Application{
 		
 		ScrollPane foodScroll = new ScrollPane();
 		ObservableList<String> foodList = FXCollections.observableList(new ArrayList<String>());
-		// TODO: DELETE WHEN FINISHING
-		foodList.add("La enchilada");
-		foodList.add("La hamburgesa");
-		foodList.add("El aguacate");
-		foodList.add("El arroz");
-		foodList.add("Las arvejas");
-		foodList.add("El bistec");
-		foodList.add("Los camarones");
-		foodList.add("La cebolla");
-		foodList.add("Los dulces");
-		foodList.add("El flan");
-		foodList.add("La galleta");
-		
+
 		ListView<String> list = new ListView<String>(foodList);
 		foodScroll.setContent(list);
 		foodScroll.setPrefHeight(400);
@@ -220,6 +210,20 @@ public class Main extends Application{
 		HBox slButtonBox = new HBox(80);
 		Button saveButton = new Button("SAVE");
 		Button loadButton = new Button("LOAD");
+		loadButton.setOnAction(event -> {
+            Stage dialog = new Stage();
+            VBox dialogVbox = new VBox(20);
+            TextField fileNameField = new TextField();
+            Button submitButton = new Button("LOAD");
+            dialogVbox.getChildren().addAll(fileNameField, submitButton);
+            Scene dialogScene = new Scene(dialogVbox, 300, 200);
+            dialog.setScene(dialogScene);
+            dialog.show();
+            submitButton.setOnAction(action -> {
+                foodData.loadFoodItems(fileNameField.getCharacters().toString());
+                foodList.addAll(foodData.getAllFoodItems().stream().map(FoodItem::getName).collect(Collectors.toList()));
+            });
+        });
 		slButtonBox.getChildren().addAll(saveButton, loadButton);
 		
 		foodListBox.getChildren().addAll(foodListLabel, foodScroll, slButtonBox);
