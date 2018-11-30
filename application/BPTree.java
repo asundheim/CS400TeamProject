@@ -310,6 +310,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#insert(Comparable, Object)
          */
         void insert(K key, V value) {
+        	//if node doesn't need to split
             if (!this.isOverflow()) {
                 if (key.compareTo(this.getFirstLeafKey()) < 0) {
                     this.keys.add(0, key);
@@ -324,6 +325,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                         this.keys.add(i + 1, key);
                     }
                 }
+            //if node needs to split
             } else {
                 if (this.parent == null) {
                     this.parent = new InternalNode();
