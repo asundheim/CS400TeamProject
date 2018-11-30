@@ -1,0 +1,45 @@
+.root {
+	-fx-background-color: rgba(175, 193, 224, 1.0);
+}
+
+.label {
+	-fx-font: 14 Times;
+}
+
+#Header {
+	-fx-font: bold 18 Times;
+	
+}
+
+#Title {
+	-fx-text-alignment: center;
+	-fx-min-width: 800;
+	-fx-font: bold 35 Times;
+	-fx-text-fill: white;
+}
+
+#topbox {
+	-fx-padding:10,0,5,240;
+}
+
+#leftpane {
+	-fx-padding: 15,0,0,0;
+	-fx-border-color: black;
+	-fx-border-width: 3;
+	-fx-border-style: solid;
+	-fx-min-width: 200;
+}
+
+#centerpane {
+	-fx-padding: 40, 0, 0, 40;
+}
+
+.button {
+	-fx-text-fill: white;
+	-fx-font: bold 18 Times;
+	-fx-background-color: rgba(13, 44, 94, 1.0);
+}
+
+.button:hover {
+	-fx-background-color: rgba(42, 94, 178, 1.0);
+}
