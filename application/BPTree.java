@@ -62,7 +62,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         }
     }
 
-    public LeafNode recFindNodeToInsert(K key, Node node) {
+    private LeafNode recFindNodeToInsert(K key, Node node) {
         if (node instanceof BPTree.LeafNode) {
             return (LeafNode)node;
         } else {
@@ -327,6 +327,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             } else {
                 if (this.parent == null) {
                     this.parent = new InternalNode();
+                    root = this.parent;
                 }
                 LeafNode newNode = split();
                 newNode.previous = this;
