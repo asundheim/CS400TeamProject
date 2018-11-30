@@ -1,5 +1,6 @@
 package application;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -148,7 +149,7 @@ public class Main extends Application{
 		nutrientVal.setMaxWidth(100);
 		
 		Button updateButton = new Button("UPDATE LIST");
-		// TODO: Have button add contents of rules to list
+
 		ruleList.getChildren().addAll(rules, nutrientList, comparison, nutrientVal, updateButton);
 		/////////////////////////////
 		
@@ -227,6 +228,13 @@ public class Main extends Application{
             dialog.setScene(dialogScene);
             dialog.show();
             submitButton.setOnAction(action -> foodData.saveFoodItems(fileNameField.getCharacters().toString()));
+        });
+        updateButton.setOnAction(event -> {
+            foodList.clear();
+            String queryString = nutrientList.getValue() + " " + comparison.getValue() + " " + nutrientVal.getCharacters().toString();
+            ArrayList<String> queryList = new ArrayList<>();
+            queryList.add(queryString);
+            foodList.addAll(foodData.filterByNutrients(queryList).stream().map(FoodItem::getName).collect(Collectors.toList()));
         });
 		slButtonBox.getChildren().addAll(saveButton, loadButton);
 		
