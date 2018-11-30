@@ -254,8 +254,13 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#rangeSearch(java.lang.Comparable, java.lang.String)
          */
         List<V> rangeSearch(K key, String comparator) {
-            // TODO : Complete
-            return null;
+        	List<V> toReturn = new ArrayList<V>();
+        	for(Node n : children) {
+        		for(V v : n.rangeSearch(key, comparator)) {
+        			toReturn.add(v);
+        		}
+        	}
+            return toReturn;
         }
     
     } // End of class InternalNode
@@ -310,6 +315,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#insert(Comparable, Object)
          */
         void insert(K key, V value) {
+        	//if node doesn't need to split
             if (!this.isOverflow()) {
                 if (key.compareTo(this.getFirstLeafKey()) < 0) {
                     this.keys.add(0, key);
@@ -324,6 +330,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                         this.keys.add(i + 1, key);
                     }
                 }
+            //if node needs to split
             } else {
                 if (this.parent == null) {
                     this.parent = new InternalNode();
@@ -346,6 +353,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             LeafNode node = new LeafNode();
             int size = values.size();
             for (int i = size - 1; i >= size / 2; i--) {
+            	//split right half of node into 'node'
                 node.insert(this.keys.get(i), this.values.get(i));
                 keys.remove(i);
                 values.remove(i);
@@ -358,8 +366,33 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#rangeSearch(Comparable, String)
          */
         List<V> rangeSearch(K key, String comparator) {
-            // TODO : Complete
-            return null;
+        	List<V> toReturn = new ArrayList<V>();
+        	if(key == null || comparator == null) {
+        		return toReturn;
+        	}
+        	if(comparator.equals("==")) {
+        		for(int i = 0; i < keys.size(); i++) {
+        			if(keys.get(i).compareTo(key) == 0) {
+        				toReturn.add(values.get(i));
+        			}
+        		}
+        	}
+        	else if(comparator.equals(">=")) {
+        		for(int i = 0; i < keys.size(); i++) {
+        			if(keys.get(i).compareTo(key) >= 0) {
+        				toReturn.add(values.get(i));
+        			}
+        		}
+        		
+        	}
+        	else if(comparator.equals("<=")) {
+        		for(int i = 0; i < keys.size(); i++) {
+        			if(keys.get(i).compareTo(key) <= 0) {
+        				toReturn.add(values.get(i));
+        			}
+        		}
+        	}
+        	return toReturn;
         }
         
     } // End of class LeafNode
