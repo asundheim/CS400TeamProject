@@ -138,18 +138,11 @@ public class Main extends Application{
 		
 		ComboBox<String> nutrientList = new ComboBox<String>();
 		nutrientList.setMinWidth(100);
-		nutrientList.getItems().addAll(
-					"calories",
-			        "fat",
-			        "protein",
-			        "carbs",
-			        "fiber");
+		nutrientList.getItems().addAll("calories", "fat", "protein", "carbohydrate", "fiber");
 		
 		ComboBox<String> comparison = new ComboBox<String>();
 		comparison.setMinWidth(100);
-		comparison.getItems().addAll(
-				"<",
-				">");
+		comparison.getItems().addAll("<=", ">=", "=");
 		
 		TextField nutrientVal = new TextField();
 		nutrientVal.setMaxWidth(100);
@@ -223,6 +216,17 @@ public class Main extends Application{
                 foodData.loadFoodItems(fileNameField.getCharacters().toString());
                 foodList.addAll(foodData.getAllFoodItems().stream().map(FoodItem::getName).collect(Collectors.toList()));
             });
+        });
+		saveButton.setOnAction(event -> {
+            Stage dialog = new Stage();
+            VBox dialogVbox = new VBox(20);
+            TextField fileNameField = new TextField();
+            Button submitButton = new Button("SAVE");
+            dialogVbox.getChildren().addAll(fileNameField, submitButton);
+            Scene dialogScene = new Scene(dialogVbox, 300, 200);
+            dialog.setScene(dialogScene);
+            dialog.show();
+            submitButton.setOnAction(action -> foodData.saveFoodItems(fileNameField.getCharacters().toString()));
         });
 		slButtonBox.getChildren().addAll(saveButton, loadButton);
 		
