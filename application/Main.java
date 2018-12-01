@@ -38,6 +38,7 @@ public class Main extends Application{
 	// Fields
 	private static FoodData foodData;
 	private static ArrayList<String> queryList;
+	private static int foodCounter;
 
 	@Override
 	public void start(Stage arg0) throws Exception {
@@ -56,8 +57,6 @@ public class Main extends Application{
 		topBox.setMinHeight(50);
 		topBox.getChildren().add(title);
 		root.setTop(topBox);
-		
-		
 		
 		
 		// Center Pane ///////////
@@ -144,6 +143,8 @@ public class Main extends Application{
 		root.setCenter(centerPane);
 		//////////////////////////
 		
+		
+		
 		// Rules to filter the list //
 		VBox ruleList = new VBox(15);
 				
@@ -225,6 +226,24 @@ public class Main extends Application{
 		Label fat = new Label("Fat(g)");			TextField fatField = new TextField();
 		Label carbs = new Label("Carbs(g): ");		TextField carbsField = new TextField();
 		Button addFoodButton = new Button("ADD FOOD");
+		addFoodButton.setOnAction(eventAddFood -> {
+			String nameVal = nameField.getCharacters().toString();
+			Double proteinVal = Double.parseDouble(proteinField.getCharacters().toString());
+			Double caloriesVal = Double.parseDouble(caloriesField.getCharacters().toString());
+			Double fiberVal = Double.parseDouble(fiberField.getCharacters().toString());
+			Double fatVal = Double.parseDouble(fatField.getCharacters().toString());
+			Double carbsVal = Double.parseDouble(carbsField.getCharacters().toString());
+			String idVal = "" + foodCounter++;
+			
+			FoodItem newFood = new FoodItem(idVal, nameVal);
+			newFood.addNutrient("protein", proteinVal);
+			newFood.addNutrient("calories", caloriesVal);
+			newFood.addNutrient("fiber", fiberVal);
+			newFood.addNutrient("fat", fatVal);
+			newFood.addNutrient("carbs", carbsVal);
+			
+			foodData.addFoodItem(newFood);
+		});
 				
 		labelBox.getChildren().addAll(name, protein, calories, fiber, fat, carbs);
 		fieldBox.getChildren().addAll(nameField, proteinField, caloriesField, 
@@ -249,6 +268,7 @@ public class Main extends Application{
 	public static void main(String[] args) {
 		foodData = new FoodData();
 		queryList = new ArrayList<String>();
+		foodCounter = 1;
 		launch(args);
 	}
 }
