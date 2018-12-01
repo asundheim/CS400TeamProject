@@ -2,6 +2,7 @@ package application;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javafx.application.Application;
@@ -36,7 +37,7 @@ public class Main extends Application{
 	
 	// Fields
 	private static FoodData foodData;
-	private static ArrayList<String> rules;
+	private static ArrayList<String> queryList;
 
 	@Override
 	public void start(Stage arg0) throws Exception {
@@ -56,101 +57,59 @@ public class Main extends Application{
 		topBox.getChildren().add(title);
 		root.setTop(topBox);
 		
-		/*  PAGE NAVIGATION BUTTONS -- NOT NEEDED RIGHT NOW
-		// Menu on left side
-		Button makeMeal = new Button("MAKE MEAL");
-		Button loadList = new Button("LOAD LIST");
-		Button addFood = new Button("ADD FOOD");
-		makeMeal.setMinWidth(150);
-		makeMeal.setBackground(new Background(new BackgroundFill(Color.rgb(13, 44, 94), null, null)));
-		makeMeal.setFont(Font.font("Times", 18));
-		makeMeal.setTextFill(Color.WHITE);
-		makeMeal.setOnMouseEntered(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				makeMeal.setBackground(new Background(new BackgroundFill(Color.rgb(42, 94, 178), null, null)));
-				
-			}
-		});
-		makeMeal.setOnMouseExited(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				makeMeal.setBackground(new Background(new BackgroundFill(Color.rgb(13, 44, 94), null, null)));
-				
-			}
-		});
-		
-		loadList.setMinWidth(150);
-		loadList.setBackground(new Background(new BackgroundFill(Color.rgb(114, 170, 255), null, null)));
-		loadList.setFont(Font.font("Times", 18));
-		loadList.setTextFill(Color.WHITE);
-		loadList.setOnMouseEntered(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				loadList.setBackground(new Background(new BackgroundFill(Color.rgb(42, 94, 178), null, null)));
-				
-			}
-		});
-		loadList.setOnMouseExited(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				loadList.setBackground(new Background(new BackgroundFill(Color.rgb(114, 170, 255), null, null)));
-				
-			}
-		});
-		
-		// Add Food button
-		addFood.setMinWidth(150);
-		addFood.setBackground(new Background(new BackgroundFill(Color.rgb(114, 170, 255), null, null)));
-		addFood.setFont(Font.font("Times", 18));
-		addFood.setTextFill(Color.WHITE);
-		addFood.setOnMouseEntered(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				addFood.setBackground(new Background(new BackgroundFill(Color.rgb(42, 94, 178), null, null)));
-				
-			}
-		});
-		addFood.setOnMouseExited(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				addFood.setBackground(new Background(new BackgroundFill(Color.rgb(114, 170, 255), null, null)));
-				
-			}
-		});
-		
-		// List of pages to navigate to //
-		VBox sceneList = new VBox(5);
-		sceneList.setPadding(new Insets(40, 0, 0, 5));
-		sceneList.setMinWidth(225);
-		sceneList.getChildren().addAll(makeMeal, loadList, addFood);
-		/////////////////////////////////
-		 * 
-		 */
-		
 		
 		// Rules to filter the list //
 		VBox ruleList = new VBox(15);
-		ruleList.setPadding(new Insets(0, 0, 0, 25));
 		
 		Label rules = new Label("RULES:");
 		rules.setId("Header");
-		rules.setFont(Font.font("Times", 20));
 		
+		HBox settings = new HBox(3);
 		ComboBox<String> nutrientList = new ComboBox<String>();
-		nutrientList.setMinWidth(100);
-		nutrientList.getItems().addAll("calories", "fat", "protein", "carbohydrate", "fiber");
+		nutrientList.setMaxWidth(100);
+		nutrientList.getItems().addAll("calories", "fat", "protein", "carbs", "fiber");
 		
 		ComboBox<String> comparison = new ComboBox<String>();
-		comparison.setMinWidth(100);
+		comparison.setMinWidth(40);
 		comparison.getItems().addAll("<=", ">=", "=");
 		
 		TextField nutrientVal = new TextField();
-		nutrientVal.setMaxWidth(100);
+		nutrientVal.setMaxWidth(70);
+		settings.getChildren().addAll(nutrientList, comparison, nutrientVal);
 		
-		Button updateButton = new Button("UPDATE LIST");
+		HBox ruleButtons = new HBox(30);
+		Button updateButton = new Button("ADD RULE");
+		Button resetButton = new Button("RESET");
+		ruleButtons.getChildren().addAll(updateButton, resetButton);
+		
+		Button seeRules = new Button("SEE RULES");
+		seeRules.setOnAction(event -> {
+			Stage dialog = new Stage();
+			VBox dialogVBox = new VBox(20);
+			ObservableList<String> ruleListDialog = FXCollections.observableList(queryList);
+			ListView<String> ruleListView = new ListView<String>(ruleListDialog);
+			ScrollPane ruleScroll = new ScrollPane();
+			ruleScroll.setMaxWidth(250);
+			ruleScroll.setMaxHeight(300);
+			ruleScroll.setContent(ruleListView);
 
-		ruleList.getChildren().addAll(rules, nutrientList, comparison, nutrientVal, updateButton);
+			Button removeRule = new Button("REMOVE");
+			removeRule.setOnAction(eventRemove -> {
+				String selectedItem = ruleListView.getSelectionModel().getSelectedItem();
+				queryList.remove(selectedItem);
+			});
+			Button OK = new Button("OK");
+			HBox dialogButtonBox = new HBox(80);
+			dialogButtonBox.setPadding(new Insets(0, 0, 0, 30));
+			dialogButtonBox.getChildren().addAll(removeRule, OK);
+			
+			dialogVBox.getChildren().addAll(ruleScroll, dialogButtonBox);
+			Scene dialogScene = new Scene(dialogVBox, 250, 375);
+			dialog.setScene(dialogScene);
+			dialog.show();
+		});
+
+		ruleList.getChildren().addAll(rules, settings, ruleButtons, seeRules);
 		/////////////////////////////
 		
 		// ADD TO FOOD LIST SECTION //
@@ -232,7 +191,6 @@ public class Main extends Application{
         updateButton.setOnAction(event -> {
             foodList.clear();
             String queryString = nutrientList.getValue() + " " + comparison.getValue() + " " + nutrientVal.getCharacters().toString();
-            ArrayList<String> queryList = new ArrayList<>();
             queryList.add(queryString);
             foodList.addAll(foodData.filterByNutrients(queryList).stream().map(FoodItem::getName).collect(Collectors.toList()));
         });
@@ -281,7 +239,7 @@ public class Main extends Application{
 	
 	public static void main(String[] args) {
 		foodData = new FoodData();
-		rules = new ArrayList<String>();
+		queryList = new ArrayList<String>();
 		launch(args);
 	}
 }
