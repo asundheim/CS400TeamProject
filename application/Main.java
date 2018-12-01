@@ -58,90 +58,7 @@ public class Main extends Application{
 		root.setTop(topBox);
 		
 		
-		// Rules to filter the list //
-		VBox ruleList = new VBox(15);
 		
-		Label rules = new Label("RULES:");
-		rules.setId("Header");
-		
-		HBox settings = new HBox(3);
-		ComboBox<String> nutrientList = new ComboBox<String>();
-		nutrientList.setMaxWidth(100);
-		nutrientList.getItems().addAll("calories", "fat", "protein", "carbs", "fiber");
-		
-		ComboBox<String> comparison = new ComboBox<String>();
-		comparison.setMinWidth(40);
-		comparison.getItems().addAll("<=", ">=", "=");
-		
-		TextField nutrientVal = new TextField();
-		nutrientVal.setMaxWidth(70);
-		settings.getChildren().addAll(nutrientList, comparison, nutrientVal);
-		
-		HBox ruleButtons = new HBox(30);
-		Button updateButton = new Button("ADD RULE");
-		Button resetButton = new Button("RESET");
-		ruleButtons.getChildren().addAll(updateButton, resetButton);
-		
-		Button seeRules = new Button("SEE RULES");
-		seeRules.setOnAction(event -> {
-			Stage dialog = new Stage();
-			VBox dialogVBox = new VBox(20);
-			ObservableList<String> ruleListDialog = FXCollections.observableList(queryList);
-			ListView<String> ruleListView = new ListView<String>(ruleListDialog);
-			ScrollPane ruleScroll = new ScrollPane();
-			ruleScroll.setMaxWidth(250);
-			ruleScroll.setMaxHeight(300);
-			ruleScroll.setContent(ruleListView);
-
-			Button removeRule = new Button("REMOVE");
-			removeRule.setOnAction(eventRemove -> {
-				String selectedItem = ruleListView.getSelectionModel().getSelectedItem();
-				queryList.remove(selectedItem);
-			});
-			Button OK = new Button("OK");
-			HBox dialogButtonBox = new HBox(80);
-			dialogButtonBox.setPadding(new Insets(0, 0, 0, 30));
-			dialogButtonBox.getChildren().addAll(removeRule, OK);
-			
-			dialogVBox.getChildren().addAll(ruleScroll, dialogButtonBox);
-			Scene dialogScene = new Scene(dialogVBox, 250, 375);
-			dialog.setScene(dialogScene);
-			dialog.show();
-		});
-
-		ruleList.getChildren().addAll(rules, settings, ruleButtons, seeRules);
-		/////////////////////////////
-		
-		// ADD TO FOOD LIST SECTION //
-		VBox addFoodBox = new VBox(5);
-		VBox labelBox = new VBox(14);
-		VBox fieldBox = new VBox(5);
-		HBox labelFieldBox = new HBox(3);
-		Label addFood = new Label("ADD TO FOOD LIST:");
-		addFood.setId("Header");
-		Label name = new Label("Name of Food: ");	TextField nameField = new TextField();
-		Label protein = new Label("Protein(g): ");	TextField proteinField = new TextField();
-		Label calories = new Label("Calories: ");	TextField caloriesField = new TextField();
-		Label fiber = new Label("Fiber(g): ");		TextField fiberField = new TextField();
-		Label fat = new Label("Fat(g)");			TextField fatField = new TextField();
-		Label carbs = new Label("Carbs(g): ");		TextField carbsField = new TextField();
-		Button addFoodButton = new Button("ADD FOOD");
-		
-		labelBox.getChildren().addAll(name, protein, calories, fiber, fat, carbs);
-		fieldBox.getChildren().addAll(nameField, proteinField, caloriesField, 
-				fiberField, fatField, carbsField);
-		
-		labelFieldBox.getChildren().addAll(labelBox, fieldBox);
-		addFoodBox.getChildren().addAll(addFood, labelFieldBox, addFoodButton);
-		//////////////////////////////
-		
-		
-		//////// Left Pane //////////
-		VBox leftPane = new VBox(90);
-		leftPane.setId("leftpane");
-		leftPane.getChildren().addAll(ruleList, addFoodBox);
-		root.setLeft(leftPane);
-		////////////////////////////
 		
 		// Center Pane ///////////
 		HBox centerPane = new HBox(20);
@@ -188,12 +105,6 @@ public class Main extends Application{
             dialog.show();
             submitButton.setOnAction(action -> foodData.saveFoodItems(fileNameField.getCharacters().toString()));
         });
-        updateButton.setOnAction(event -> {
-            foodList.clear();
-            String queryString = nutrientList.getValue() + " " + comparison.getValue() + " " + nutrientVal.getCharacters().toString();
-            queryList.add(queryString);
-            foodList.addAll(foodData.filterByNutrients(queryList).stream().map(FoodItem::getName).collect(Collectors.toList()));
-        });
 		slButtonBox.getChildren().addAll(saveButton, loadButton);
 		
 		foodListBox.getChildren().addAll(foodListLabel, foodScroll, slButtonBox);
@@ -233,6 +144,104 @@ public class Main extends Application{
 		root.setCenter(centerPane);
 		//////////////////////////
 		
+		// Rules to filter the list //
+		VBox ruleList = new VBox(15);
+				
+		Label rules = new Label("RULES:");
+		rules.setId("Header");
+				
+		HBox settings = new HBox(3);
+		ComboBox<String> nutrientList = new ComboBox<String>();
+		nutrientList.setMaxWidth(100);
+		nutrientList.getItems().addAll("calories", "fat", "protein", "carbs", "fiber");
+				
+		ComboBox<String> comparison = new ComboBox<String>();
+		comparison.setMinWidth(40);
+		comparison.getItems().addAll("<=", ">=", "=");
+				
+		TextField nutrientVal = new TextField();
+		nutrientVal.setMaxWidth(70);
+		settings.getChildren().addAll(nutrientList, comparison, nutrientVal);
+				
+		HBox ruleButtons = new HBox(30);
+		Button updateButton = new Button("ADD RULE");
+		updateButton.setOnAction(event -> {
+            foodList.clear();
+            String queryString = nutrientList.getValue() + " " + comparison.getValue() + " " + nutrientVal.getCharacters().toString();
+            queryList.add(queryString);
+            foodList.addAll(foodData.filterByNutrients(queryList).stream().map(FoodItem::getName).collect(Collectors.toList()));
+        });
+		Button resetButton = new Button("RESET");
+		ruleButtons.getChildren().addAll(updateButton, resetButton);
+				
+		Button seeRules = new Button("SEE RULES");
+		seeRules.setOnAction(event -> {
+			Stage dialog = new Stage();
+			VBox dialogVBox = new VBox(20);
+			ObservableList<String> ruleListDialog = FXCollections.observableList(queryList);				
+			ListView<String> ruleListView = new ListView<String>(ruleListDialog);
+			ScrollPane ruleScroll = new ScrollPane();
+			ruleScroll.setMaxWidth(250);
+			ruleScroll.setMaxHeight(300);
+			ruleScroll.setContent(ruleListView);
+
+			Button removeRule = new Button("REMOVE");
+			removeRule.setOnAction(eventRemove -> {
+				String selectedItem = ruleListView.getSelectionModel().getSelectedItem();
+				queryList.remove(selectedItem);
+				ListView<String> newRuleListView = new ListView<String>(ruleListDialog);
+				ruleScroll.setContent(newRuleListView);
+				foodList.addAll(foodData.filterByNutrients(queryList).stream().map(FoodItem::getName).collect(Collectors.toList()));
+				
+			});
+			Button OK = new Button("OK");
+			OK.setOnAction(eventOK -> {
+				dialog.close();
+			});
+			HBox dialogButtonBox = new HBox(80);
+			dialogButtonBox.setPadding(new Insets(0, 0, 0, 30));
+			dialogButtonBox.getChildren().addAll(removeRule, OK);
+					
+			dialogVBox.getChildren().addAll(ruleScroll, dialogButtonBox);
+			Scene dialogScene = new Scene(dialogVBox, 250, 375);
+			dialog.setScene(dialogScene);
+			dialog.show();
+		});
+
+		ruleList.getChildren().addAll(rules, settings, ruleButtons, seeRules);
+		/////////////////////////////
+				
+		// ADD TO FOOD LIST SECTION //
+		VBox addFoodBox = new VBox(5);
+		VBox labelBox = new VBox(14);
+		VBox fieldBox = new VBox(5);
+		HBox labelFieldBox = new HBox(3);
+		Label addFood = new Label("ADD TO FOOD LIST:");
+		addFood.setId("Header");
+		Label name = new Label("Name of Food: ");	TextField nameField = new TextField();
+		Label protein = new Label("Protein(g): ");	TextField proteinField = new TextField();
+		Label calories = new Label("Calories: ");	TextField caloriesField = new TextField();
+		Label fiber = new Label("Fiber(g): ");		TextField fiberField = new TextField();
+		Label fat = new Label("Fat(g)");			TextField fatField = new TextField();
+		Label carbs = new Label("Carbs(g): ");		TextField carbsField = new TextField();
+		Button addFoodButton = new Button("ADD FOOD");
+				
+		labelBox.getChildren().addAll(name, protein, calories, fiber, fat, carbs);
+		fieldBox.getChildren().addAll(nameField, proteinField, caloriesField, 
+				fiberField, fatField, carbsField);
+		
+		labelFieldBox.getChildren().addAll(labelBox, fieldBox);
+		addFoodBox.getChildren().addAll(addFood, labelFieldBox, addFoodButton);
+		//////////////////////////////
+				
+				
+		//////// Left Pane //////////
+		VBox leftPane = new VBox(90);
+		leftPane.setId("leftpane");
+		leftPane.getChildren().addAll(ruleList, addFoodBox);
+		root.setLeft(leftPane);
+		////////////////////////////
+				
 		arg0.setScene(scene1);
 		arg0.show();
 	}
