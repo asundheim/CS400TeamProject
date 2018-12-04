@@ -84,7 +84,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             !comparator.contentEquals("==") && 
             !comparator.contentEquals("<=") )
             return new ArrayList<V>();
-        if(root == null) {
+        if (root == null) {
         	return new ArrayList<V>();
         }
         return recFindNodeToInsert(key, root).rangeSearch(key, comparator);
@@ -221,7 +221,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#isOverflow()
          */
         boolean isOverflow() {
-            return this.children.size() == branchingFactor;
+            return this.keys.size() == branchingFactor - 1;
         }
         
         /**
@@ -250,6 +250,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                         if (key.compareTo(this.keys.get(i)) > 0 && key.compareTo(this.keys.get(i + 1)) < 1) {
                             this.keys.add(i + 1, key);
                             this.children.add(i + 1, node);
+                            break;
                         }
                     }
                 }
@@ -275,7 +276,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         InternalNode split() {
             InternalNode node = new InternalNode();
             int size = this.children.size();
-            for (int i = size - 1 ;i >= size / 2; i--) {
+            for (int i = size - 1; i >= size / 2; i--) {
                 //split right half of node into 'node'
                 node.children.add(0, this.children.get(i));
                 this.children.remove(i);
@@ -369,6 +370,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
                         if (key.compareTo(this.keys.get(i)) > 0 && key.compareTo(this.keys.get(i + 1)) < 1) {
                             this.keys.add(i + 1, key);
                             this.values.add(i + 1, value);
+                            break;
                         }
                     }
                 }

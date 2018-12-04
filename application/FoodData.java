@@ -20,7 +20,8 @@ public class FoodData implements FoodDataADT<FoodItem> {
     private List<FoodItem> foodItemList;
 
     // Map of nutrients and their corresponding index
-    private HashMap<String, BPTree<Double, FoodItem>> indexes;
+    // TODO: remake this private once it gets fixed
+    public HashMap<String, BPTree<Double, FoodItem>> indexes;
     
     
     /**
@@ -53,7 +54,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
             this.foodItemList.forEach((FoodItem foodItem) -> {
                 foodItem.getNutrients().forEach((String nutrient, Double value) -> {
                     if (!this.indexes.containsKey(nutrient)) {
-                        this.indexes.put(nutrient, new BPTree<>(10));
+                        this.indexes.put(nutrient, new BPTree<>(4));
                     }
                     this.indexes.get(nutrient).insert(value, foodItem);
                 });
@@ -100,6 +101,9 @@ public class FoodData implements FoodDataADT<FoodItem> {
     @Override
     public void addFoodItem(FoodItem foodItem) {
         foodItem.getNutrients().forEach((String nutrient, Double value) -> {
+            if (!this.indexes.containsKey(nutrient)) {
+                this.indexes.put(nutrient, new BPTree<>(5));
+            }
             this.indexes.get(nutrient).insert(value, foodItem);
         });
         this.foodItemList.add(foodItem);
