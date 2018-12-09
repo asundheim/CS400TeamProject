@@ -54,7 +54,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
             this.foodItemList.forEach((FoodItem foodItem) -> {
                 foodItem.getNutrients().forEach((String nutrient, Double value) -> {
                     if (!this.indexes.containsKey(nutrient)) {
-                        this.indexes.put(nutrient, new BPTree<>(4));
+                        this.indexes.put(nutrient, new BPTree<>(3));
                     }
                     this.indexes.get(nutrient).insert(value, foodItem);
                 });
@@ -102,7 +102,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     public void addFoodItem(FoodItem foodItem) {
         foodItem.getNutrients().forEach((String nutrient, Double value) -> {
             if (!this.indexes.containsKey(nutrient)) {
-                this.indexes.put(nutrient, new BPTree<>(5));
+                this.indexes.put(nutrient, new BPTree<>(3));
             }
             this.indexes.get(nutrient).insert(value, foodItem);
         });
