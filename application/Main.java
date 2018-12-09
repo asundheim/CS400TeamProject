@@ -70,7 +70,11 @@ public class Main extends Application{
 		
 		ScrollPane foodScroll = new ScrollPane();
 		ObservableList<String> foodList = FXCollections.observableList(new ArrayList<String>());
-
+		List<FoodItem> foodItems = foodData.getAllFoodItems();
+		for (int i = 0; i < foodItems.size(); i++) {
+			foodList.add(foodItems.get(i).getName());
+		}
+		
 		ListView<String> list = new ListView<String>(foodList);
 		foodScroll.setContent(list);
 		foodScroll.setPrefHeight(400);
@@ -242,7 +246,22 @@ public class Main extends Application{
 			newFood.addNutrient("fat", fatVal);
 			newFood.addNutrient("carbs", carbsVal);
 			
+			// Empty the textFields
+			nameField.setText("");
+			proteinField.setText("");
+			caloriesField.setText("");
+			fiberField.setText("");
+			fatField.setText("");
+			carbsField.setText("");
+			
 			foodData.addFoodItem(newFood);
+			ObservableList<String> newFoodList = FXCollections.observableList(new ArrayList<String>());
+			List<FoodItem> newFoodItems = foodData.getAllFoodItems();
+			for (int i = 0; i < newFoodItems.size(); i++) {
+				newFoodList.add(newFoodItems.get(i).getName());
+			}
+			ListView<String> newList = new ListView<String>(newFoodList);
+			foodScroll.setContent(newList);
 		});
 				
 		labelBox.getChildren().addAll(name, protein, calories, fiber, fat, carbs);

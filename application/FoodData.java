@@ -100,6 +100,9 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public void addFoodItem(FoodItem foodItem) {
+    	if (foodItemList.contains(foodItem)) {
+    		return;
+    	}
         foodItem.getNutrients().forEach((String nutrient, Double value) -> {
             if (!this.indexes.containsKey(nutrient)) {
                 this.indexes.put(nutrient, new BPTree<>(3));
