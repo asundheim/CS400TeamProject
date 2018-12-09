@@ -90,6 +90,7 @@ public class Main extends Application{
             Button submitButton = new Button("LOAD");
             dialogVbox.getChildren().addAll(fileNameField, submitButton);
             Scene dialogScene = new Scene(dialogVbox, 300, 200);
+			dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             dialog.setScene(dialogScene);
             dialog.show();
             submitButton.setOnAction(action -> {
@@ -104,6 +105,7 @@ public class Main extends Application{
             Button submitButton = new Button("SAVE");
             dialogVbox.getChildren().addAll(fileNameField, submitButton);
             Scene dialogScene = new Scene(dialogVbox, 300, 200);
+			dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             dialog.setScene(dialogScene);
             dialog.show();
             submitButton.setOnAction(action -> foodData.saveFoodItems(fileNameField.getCharacters().toString()));
@@ -162,7 +164,7 @@ public class Main extends Application{
 				
 		ComboBox<String> comparison = new ComboBox<String>();
 		comparison.setMinWidth(40);
-		comparison.getItems().addAll("<=", ">=", "=");
+		comparison.getItems().addAll("<=", ">=", "==");
 				
 		TextField nutrientVal = new TextField();
 		nutrientVal.setMaxWidth(70);

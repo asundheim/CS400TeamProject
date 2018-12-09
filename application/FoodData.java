@@ -31,6 +31,11 @@ public class FoodData implements FoodDataADT<FoodItem> {
     public FoodData() {
         this.foodItemList = new ArrayList<>();
         this.indexes = new HashMap<>();
+        this.indexes.put("calories", new BPTree<>(3));
+        this.indexes.put("fat", new BPTree<>(3));
+        this.indexes.put("carbohydrate", new BPTree<>(3));
+        this.indexes.put("fiber", new BPTree<>(3));
+        this.indexes.put("protein", new BPTree<>(3));
     }
 
     
