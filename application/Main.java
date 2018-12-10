@@ -27,7 +27,25 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class Main extends Application{
-	
+
+	/**
+	 * TODO:
+	 * View a list of current food items available. *
+	 * Scroll existing food list alphabetical by name *
+	 * Load new foods from a data file containing new food list information (replaces existing food list) *
+	 * Save existing foods to data file containing current food list information *
+	 *
+	 * Select (add/remove) food items to a meal list x
+	 * View meal summary - (show the nutritional analysis for the food items in the meal) x
+	 *
+	 * Add new food items to the existing food list ?
+	 *
+	 * Add/remove rules to a food query (list of filter rules) x
+	 * Query the food list using the food query rules x
+	 *
+	 * Exit the program x
+	 */
+
 	// Fields
 	private static FoodData foodData;
 	private static ArrayList<String> queryList;
