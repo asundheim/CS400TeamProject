@@ -148,7 +148,7 @@ public class Main extends Application{
 		HBox settings = new HBox(3);
 		ComboBox<String> nutrientList = new ComboBox<String>();
 		nutrientList.setMaxWidth(100);
-		nutrientList.getItems().addAll("calories", "fat", "protein", "carbs", "fiber");
+		nutrientList.getItems().addAll("calories", "fat", "protein", "carbohydrate", "fiber");
 				
 		ComboBox<String> comparison = new ComboBox<String>();
 		comparison.setMinWidth(40);
