@@ -21,14 +21,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -69,46 +62,45 @@ public class Main extends Application{
 		Label foodListLabel = new Label("FOOD LIST:");
 		foodListLabel.setId("Header");
 
-		ScrollPane foodScroll = new ScrollPane();
+		Pane foodScroll = new Pane();
 		ObservableList<String> foodList = FXCollections.observableList(new ArrayList<String>());
 
 		ListView<String> list = new ListView<String>(foodList);
-		foodScroll.setContent(list);
+		foodScroll.getChildren().addAll(list);
 		foodScroll.setPrefHeight(400);
 		foodScroll.setPrefWidth(230);
-		
+
 		HBox slButtonBox = new HBox(80);
 		Button saveButton = new Button("SAVE");
 		Button loadButton = new Button("LOAD");
 		loadButton.setOnAction(event -> {
-            Stage dialog = new Stage();
-            VBox dialogVbox = new VBox(20);
-            TextField fileNameField = new TextField();
-            Button submitButton = new Button("LOAD");
-            dialogVbox.getChildren().addAll(fileNameField, submitButton);
-            Scene dialogScene = new Scene(dialogVbox, 300, 200);
+			Stage dialog = new Stage();
+			VBox dialogVbox = new VBox(20);
+			TextField fileNameField = new TextField();
+			Button submitButton = new Button("LOAD");
+			dialogVbox.getChildren().addAll(fileNameField, submitButton);
+			Scene dialogScene = new Scene(dialogVbox, 300, 200);
 			dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-            dialog.setScene(dialogScene);
-            dialog.show();
-            submitButton.setOnAction(action -> {
-                foodData.loadFoodItems(fileNameField.getCharacters().toString());
-                foodList.addAll(foodData.getAllFoodItems().stream().map(FoodItem::getName).collect(Collectors.toList()));
-            });
-        });
+			dialog.setScene(dialogScene);
+			dialog.show();
+			submitButton.setOnAction(action -> {
+				foodData.loadFoodItems(fileNameField.getCharacters().toString());
+				foodList.addAll(foodData.getAllFoodItems().stream().map(FoodItem::getName).collect(Collectors.toList()));
+			});
+		});
 		saveButton.setOnAction(event -> {
-            Stage dialog = new Stage();
-            VBox dialogVbox = new VBox(20);
-            TextField fileNameField = new TextField();
-            Button submitButton = new Button("SAVE");
-            dialogVbox.getChildren().addAll(fileNameField, submitButton);
-            Scene dialogScene = new Scene(dialogVbox, 300, 200);
+			Stage dialog = new Stage();
+			VBox dialogVbox = new VBox(20);
+			TextField fileNameField = new TextField();
+			Button submitButton = new Button("SAVE");
+			dialogVbox.getChildren().addAll(fileNameField, submitButton);
+			Scene dialogScene = new Scene(dialogVbox, 300, 200);
 			dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-            dialog.setScene(dialogScene);
-            dialog.show();
-            submitButton.setOnAction(action -> foodData.saveFoodItems(fileNameField.getCharacters().toString()));
-        });
+			dialog.setScene(dialogScene);
+			dialog.show();
+			submitButton.setOnAction(action -> foodData.saveFoodItems(fileNameField.getCharacters().toString()));
+		});
 		slButtonBox.getChildren().addAll(saveButton, loadButton);
-		
 		foodListBox.getChildren().addAll(foodListLabel, foodScroll, slButtonBox);
 		////////////////////////////////
 		
@@ -166,7 +158,7 @@ public class Main extends Application{
 		TextField nutrientVal = new TextField();
 		nutrientVal.setMaxWidth(70);
 		settings.getChildren().addAll(nutrientList, comparison, nutrientVal);
-				
+
 		HBox ruleButtons = new HBox(30);
 		Button updateButton = new Button("ADD RULE");
 		updateButton.setOnAction(event -> {
