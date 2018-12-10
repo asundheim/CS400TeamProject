@@ -22,8 +22,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     // Map of nutrients and their corresponding index
     // TODO: remake this private once it gets fixed
     public HashMap<String, BPTree<Double, FoodItem>> indexes;
-    
-    
+
     /**
      * Public constructor
      * 
@@ -31,11 +30,12 @@ public class FoodData implements FoodDataADT<FoodItem> {
     public FoodData() {
         this.foodItemList = new ArrayList<>();
         this.indexes = new HashMap<>();
-        this.indexes.put("calories", new BPTree<>(3));
-        this.indexes.put("fat", new BPTree<>(3));
-        this.indexes.put("carbohydrate", new BPTree<>(3));
-        this.indexes.put("fiber", new BPTree<>(3));
-        this.indexes.put("protein", new BPTree<>(3));
+        int BRANCHING_FACTOR = 10;
+        this.indexes.put("calories", new BPTree<>(BRANCHING_FACTOR));
+        this.indexes.put("fat", new BPTree<>(BRANCHING_FACTOR));
+        this.indexes.put("carbohydrate", new BPTree<>(BRANCHING_FACTOR));
+        this.indexes.put("fiber", new BPTree<>(BRANCHING_FACTOR));
+        this.indexes.put("protein", new BPTree<>(BRANCHING_FACTOR));
     }
 
     
@@ -58,9 +58,6 @@ public class FoodData implements FoodDataADT<FoodItem> {
                     .collect(Collectors.toList());
             this.foodItemList.forEach((FoodItem foodItem) -> {
                 foodItem.getNutrients().forEach((String nutrient, Double value) -> {
-                    if (!this.indexes.containsKey(nutrient)) {
-                        this.indexes.put(nutrient, new BPTree<>(3));
-                    }
                     this.indexes.get(nutrient).insert(value, foodItem);
                 });
             });
@@ -106,9 +103,6 @@ public class FoodData implements FoodDataADT<FoodItem> {
     @Override
     public void addFoodItem(FoodItem foodItem) {
         foodItem.getNutrients().forEach((String nutrient, Double value) -> {
-            if (!this.indexes.containsKey(nutrient)) {
-                this.indexes.put(nutrient, new BPTree<>(3));
-            }
             this.indexes.get(nutrient).insert(value, foodItem);
         });
         this.foodItemList.add(foodItem);

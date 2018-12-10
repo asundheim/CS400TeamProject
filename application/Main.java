@@ -62,12 +62,13 @@ public class Main extends Application{
 		// Center Pane ///////////
 		HBox centerPane = new HBox(20);
 		centerPane.setId("centerpane");
+
 		
 		///////// FOOD LIST ////////////
 		VBox foodListBox = new VBox(5);
 		Label foodListLabel = new Label("FOOD LIST:");
 		foodListLabel.setId("Header");
-		
+
 		ScrollPane foodScroll = new ScrollPane();
 		ObservableList<String> foodList = FXCollections.observableList(new ArrayList<String>());
 
