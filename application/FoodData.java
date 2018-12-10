@@ -49,6 +49,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
         try {
             this.foodItemList = Files.lines(new File(filePath).toPath())
                     .map(x -> x.split(","))
+                    .filter(x -> x.length == 12)
                     .map(x -> {
                         FoodItem food = new FoodItem(x[0], x[1]);
                         for (int i = 2; i < x.length; i+=2) {
@@ -69,7 +70,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     }
 
     private void sortFoodItems() {
-        this.foodItemList.sort(Comparator.comparing(FoodItem::getName));
+        this.foodItemList.sort(Comparator.comparing((FoodItem x) -> x.getName().toLowerCase()));
     }
     /*
      * (non-Javadoc)
