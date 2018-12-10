@@ -51,7 +51,6 @@ public class Main extends Application{
 		topBox.getChildren().add(title);
 		root.setTop(topBox);
 		
-		
 		// Center Pane ///////////
 		HBox centerPane = new HBox(20);
 		centerPane.setId("centerpane");
@@ -75,11 +74,11 @@ public class Main extends Application{
 		Button loadButton = new Button("LOAD");
 		loadButton.setOnAction(event -> {
 			Stage dialog = new Stage();
-			VBox dialogVbox = new VBox(20);
+			VBox dialogVBox = new VBox(20);
 			TextField fileNameField = new TextField();
 			Button submitButton = new Button("LOAD");
-			dialogVbox.getChildren().addAll(fileNameField, submitButton);
-			Scene dialogScene = new Scene(dialogVbox, 300, 200);
+			dialogVBox.getChildren().addAll(fileNameField, submitButton);
+			Scene dialogScene = new Scene(dialogVBox, 300, 200);
 			dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			dialog.setScene(dialogScene);
 			dialog.show();
@@ -90,11 +89,11 @@ public class Main extends Application{
 		});
 		saveButton.setOnAction(event -> {
 			Stage dialog = new Stage();
-			VBox dialogVbox = new VBox(20);
+			VBox dialogVBox = new VBox(20);
 			TextField fileNameField = new TextField();
 			Button submitButton = new Button("SAVE");
-			dialogVbox.getChildren().addAll(fileNameField, submitButton);
-			Scene dialogScene = new Scene(dialogVbox, 300, 200);
+			dialogVBox.getChildren().addAll(fileNameField, submitButton);
+			Scene dialogScene = new Scene(dialogVBox, 300, 200);
 			dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			dialog.setScene(dialogScene);
 			dialog.show();

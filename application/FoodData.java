@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,6 +57,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
                         return food;
                     })
                     .collect(Collectors.toList());
+            this.sortFoodItems();
             this.foodItemList.forEach((FoodItem foodItem) -> {
                 foodItem.getNutrients().forEach((String nutrient, Double value) -> {
                     this.indexes.get(nutrient).insert(value, foodItem);
@@ -66,6 +68,9 @@ public class FoodData implements FoodDataADT<FoodItem> {
         }
     }
 
+    private void sortFoodItems() {
+        this.foodItemList.sort(Comparator.comparing(FoodItem::getName));
+    }
     /*
      * (non-Javadoc)
      * @see skeleton.application.FoodDataADT#filterByName(java.lang.String)
@@ -106,6 +111,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
             this.indexes.get(nutrient).insert(value, foodItem);
         });
         this.foodItemList.add(foodItem);
+        this.sortFoodItems();
     }
 
     /*
