@@ -80,7 +80,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     public List<FoodItem> filterByName(String substring) {
         return this.foodItemList
                 .stream()
-                .filter(x -> x.getName().contains(substring))
+                .filter(x -> x.getName().toLowerCase().contains(substring.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
@@ -152,7 +152,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
                             nutrients.add("" + item.getNutrientValue("fiber"));
                             nutrients.add("protein");
                             nutrients.add("" + item.getNutrientValue("protein"));
-                            return item.getID() + " " + item.getName() + "," + String.join(",", nutrients);
+                            return item.getID() + "," + item.getName() + "," + String.join(",", nutrients);
                         })
                         .collect(Collectors.toList())
             );

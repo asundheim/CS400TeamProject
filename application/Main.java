@@ -36,6 +36,7 @@ public class Main extends Application{
 	// Fields
 	private static FoodData foodData;
 	private static ArrayList<String> queryList;
+	private String filterString = "";
 	private static int foodCounter;
 
 	@Override
@@ -91,6 +92,7 @@ public class Main extends Application{
 				foodData.loadFoodItems(fileNameField.getCharacters().toString());
                 foodList.addAll(foodData.filterByNutrients(queryList)
                         .stream()
+                        .filter(x -> foodData.filterByName(filterString).contains(x))
                         .map(FoodItem::getName)
                         .collect(Collectors.toList())
                 );
@@ -115,33 +117,82 @@ public class Main extends Application{
 		slButtonBox.getChildren().addAll(saveButton, loadButton);
 		foodListBox.getChildren().addAll(foodListLabel, foodScroll, slButtonBox);
 		////////////////////////////////
-		
-		///////// ADD BUTTON ///////////
-		VBox addBox = new VBox();
-		addBox.setPadding(new Insets(150,0,0,0));
-		Button addButton = new Button("ADD");
-		addBox.getChildren().add(addButton);
-		////////////////////////////////
-		
+
+
+
 		////////// MEAL LIST ///////////
 		VBox mealListBox = new VBox(5);
 		Label mealListLabel = new Label("MEAL LIST:");
 		mealListLabel.setId("Header");
 		
-		ScrollPane mealScroll = new ScrollPane();
+		Pane mealScroll = new Pane();
 		ObservableList<String> mealList = FXCollections.observableList(new ArrayList<String>());
 		ListView<String> list2 = new ListView<String>(mealList);
-		//TODO: DELETE WHEN DONE
-		mealList.add("Los dulces");
-		mealList.add("La galleta");
-		mealList.add("El flan");
-		mealScroll.setContent(list2);
+
+		mealScroll.getChildren().addAll(list2);
 		mealScroll.setPrefHeight(400);
 		mealScroll.setMaxWidth(230);
-		
+        ///////// ADD BUTTON ///////////
+        VBox addBox = new VBox();
+        addBox.setPadding(new Insets(150,0,0,0));
+        Button addButton = new Button("ADD");
+        addButton.setOnAction(action -> {
+            if (list.getSelectionModel().getSelectedItem() != null) {
+                mealList.add(list.getSelectionModel().getSelectedItem());
+            }
+        });
+        addBox.getChildren().add(addButton);
+        ////////////////////////////////
 		HBox raButtonBox = new HBox(10);
 		Button removeButton = new Button("REMOVE");
+		removeButton.setOnAction(action -> {
+            if (list2.getSelectionModel().getSelectedItem() != null) {
+                mealList.remove(list2.getSelectionModel().getSelectedItem());
+            }
+        });
 		Button analyzeButton = new Button("ANALYZE");
+		analyzeButton.setOnAction(action -> {
+            ArrayList<FoodItem> selectedItems = new ArrayList<>(foodData.getAllFoodItems()
+                    .stream()
+                    .filter(x -> mealList.contains(x.getName()))
+                    .collect(Collectors.toList())
+            );
+            Stage dialog = new Stage();
+            VBox dialogVBox = new VBox(20);
+            Label message = new Label("Kowalski: Analysis");
+            Label proteinInfo = new Label(selectedItems
+                    .stream()
+                    .mapToDouble(x -> x.getNutrientValue("protein"))
+                    .sum() + " grams of protein"
+            );
+            Label caloriesInfo = new Label(selectedItems
+                    .stream()
+                    .mapToDouble(x -> x.getNutrientValue("calories"))
+                    .sum() + " calories"
+            );
+            Label fiberInfo = new Label(selectedItems
+                    .stream()
+                    .mapToDouble(x -> x.getNutrientValue("fiber"))
+                    .sum() + " grams of fiber"
+            );
+            Label fatInfo = new Label(selectedItems
+                    .stream()
+                    .mapToDouble(x -> x.getNutrientValue("fat"))
+                    .sum() + " grams of fat"
+            );
+            Label carbInfo = new Label(selectedItems
+                    .stream()
+                    .mapToDouble(x -> x.getNutrientValue("carbohydrate"))
+                    .sum() + " grams of carbohydrates"
+            );
+            Button confirmButton = new Button("OK");
+            dialogVBox.getChildren().addAll(message, proteinInfo, caloriesInfo, fiberInfo, fatInfo, carbInfo, confirmButton);
+            Scene dialogScene = new Scene(dialogVBox, 300, 300);
+            dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+            dialog.setScene(dialogScene);
+            dialog.show();
+            confirmButton.setOnAction(x -> dialog.close());
+        });
 		raButtonBox.getChildren().addAll(removeButton, analyzeButton);
 		mealListBox.getChildren().addAll(mealListLabel, mealScroll, raButtonBox);
 		////////////////////////////////
@@ -149,14 +200,23 @@ public class Main extends Application{
 		centerPane.getChildren().addAll(foodListBox, addBox, mealListBox);
 		root.setCenter(centerPane);
 		//////////////////////////
-		
-		
-		
+
 		// Rules to filter the list //
 		VBox ruleList = new VBox(15);
 				
 		Label rules = new Label("RULES:");
 		rules.setId("Header");
+		TextField nameFilter = new TextField();
+		nameFilter.textProperty().addListener((observable, oldValue, newValue) -> {
+		    filterString = newValue;
+            foodList.clear();
+            foodList.addAll(foodData.filterByName(filterString)
+                    .stream()
+                    .filter(x -> foodData.filterByNutrients(queryList).contains(x))
+                    .map(FoodItem::getName)
+                    .collect(Collectors.toList())
+            );
+		});
 				
 		HBox settings = new HBox(3);
 		ComboBox<String> nutrientList = new ComboBox<String>();
@@ -182,6 +242,7 @@ public class Main extends Application{
             queryList.add(queryString);
             foodList.addAll(foodData.filterByNutrients(queryList)
                     .stream()
+                    .filter(x -> foodData.filterByName(filterString).contains(x))
                     .map(FoodItem::getName)
                     .collect(Collectors.toList())
             );
@@ -192,13 +253,14 @@ public class Main extends Application{
 		    foodList.clear();
 		    foodList.addAll(foodData.filterByNutrients(queryList)
                     .stream()
+                    .filter(x -> foodData.filterByName(filterString).contains(x))
                     .map(FoodItem::getName)
                     .collect(Collectors.toList())
             );
         });
 
 		ruleButtons.getChildren().addAll(updateButton, resetButton);
-				
+
 		Button seeRules = new Button("SEE RULES");
 		seeRules.setOnAction(event -> {
 			Stage dialog = new Stage();
@@ -218,6 +280,7 @@ public class Main extends Application{
 				ruleScroll.setContent(newRuleListView);
 				foodList.addAll(foodData.filterByNutrients(queryList)
                         .stream()
+                        .filter(x -> foodData.filterByName(filterString).contains(x))
                         .map(FoodItem::getName)
                         .collect(Collectors.toList())
                 );
@@ -234,7 +297,7 @@ public class Main extends Application{
 			dialog.show();
 		});
 
-		ruleList.getChildren().addAll(rules, settings, ruleButtons, seeRules);
+		ruleList.getChildren().addAll(rules, nameFilter, settings, ruleButtons, seeRules);
 		/////////////////////////////
 				
 		// ADD TO FOOD LIST SECTION //
@@ -290,6 +353,7 @@ public class Main extends Application{
 				foodList.clear();
 				foodList.addAll(foodData.filterByNutrients(queryList)
                         .stream()
+                        .filter(x -> foodData.filterByName(filterString).contains(x))
                         .map(FoodItem::getName)
                         .collect(Collectors.toList())
                 );
