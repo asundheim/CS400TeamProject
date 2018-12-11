@@ -242,23 +242,55 @@ public class Main extends Application{
         });
 		Button addFoodButton = new Button("ADD FOOD");
 		addFoodButton.setOnAction(eventAddFood -> {
-			String nameVal = nameField.getCharacters().toString();
-			double proteinVal = Double.parseDouble(proteinField.getCharacters().toString());
-			double caloriesVal = Double.parseDouble(caloriesField.getCharacters().toString());
-			double fiberVal = Double.parseDouble(fiberField.getCharacters().toString());
-			double fatVal = Double.parseDouble(fatField.getCharacters().toString());
-			double carbsVal = Double.parseDouble(carbsField.getCharacters().toString());
-			String idVal = "" + foodCounter++;
+			try {
+				String nameVal = nameField.getCharacters().toString();
+				if (nameVal.trim().equals("")) {
+					throw new Exception();
+				}
+				double proteinVal = Double.parseDouble(proteinField.getCharacters().toString());
+				double caloriesVal = Double.parseDouble(caloriesField.getCharacters().toString());
+				double fiberVal = Double.parseDouble(fiberField.getCharacters().toString());
+				double fatVal = Double.parseDouble(fatField.getCharacters().toString());
+				double carbsVal = Double.parseDouble(carbsField.getCharacters().toString());
+				String idVal = "" + foodCounter++;
 
-			FoodItem newFood = new FoodItem(idVal, nameVal);
-			newFood.addNutrient("protein", proteinVal);
-			newFood.addNutrient("calories", caloriesVal);
-			newFood.addNutrient("fiber", fiberVal);
-			newFood.addNutrient("fat", fatVal);
-			newFood.addNutrient("carbohydrate", carbsVal);
-			
-			foodData.addFoodItem(newFood);
-			foodList.add(newFood.getName());
+				FoodItem newFood = new FoodItem(idVal, nameVal);
+				newFood.addNutrient("protein", proteinVal);
+				newFood.addNutrient("calories", caloriesVal);
+				newFood.addNutrient("fiber", fiberVal);
+				newFood.addNutrient("fat", fatVal);
+				newFood.addNutrient("carbohydrate", carbsVal);
+
+				foodData.addFoodItem(newFood);
+				foodList.add(newFood.getName());
+			} catch (NumberFormatException e) {
+				Stage dialog = new Stage();
+				VBox dialogVBox = new VBox(20);
+				Button confirmButton = new Button("Ok");
+				Label message = new Label("Incorrect / Missing values in Nutrients");
+				dialogVBox.getChildren().addAll(message, confirmButton);
+				Scene dialogScene = new Scene(dialogVBox, 300, 200);
+				dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+				dialog.setScene(dialogScene);
+				dialog.show();
+				confirmButton.setOnAction(action -> {
+					dialog.close();
+				});
+			} catch (Exception e) {
+                Stage dialog = new Stage();
+                VBox dialogVBox = new VBox(20);
+                Label message = new Label("Missing Food Name");
+                Button confirmButton = new Button("Ok");
+                dialogVBox.getChildren().addAll(message, confirmButton);
+                Scene dialogScene = new Scene(dialogVBox, 300, 200);
+                dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+                dialog.setScene(dialogScene);
+                dialog.show();
+                confirmButton.setOnAction(action -> {
+                    dialog.close();
+                });
+			}
+
 		});
 				
 		labelBox.getChildren().addAll(name, protein, calories, fiber, fat, carbs);
