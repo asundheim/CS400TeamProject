@@ -255,9 +255,10 @@ public class Main extends Application{
 			newFood.addNutrient("calories", caloriesVal);
 			newFood.addNutrient("fiber", fiberVal);
 			newFood.addNutrient("fat", fatVal);
-			newFood.addNutrient("carbs", carbsVal);
+			newFood.addNutrient("carbohydrate", carbsVal);
 			
 			foodData.addFoodItem(newFood);
+			foodList.add(newFood.getName());
 		});
 				
 		labelBox.getChildren().addAll(name, protein, calories, fiber, fat, carbs);
