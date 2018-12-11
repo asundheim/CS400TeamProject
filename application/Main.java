@@ -161,6 +161,9 @@ public class Main extends Application{
 				
 		TextField nutrientVal = new TextField();
 		nutrientVal.setMaxWidth(70);
+        nutrientVal.textProperty().addListener((observable, oldValue, newValue) -> {
+            nutrientVal.setText(newValue.replaceAll("[^\\d.]", ""));
+        });
 		settings.getChildren().addAll(nutrientList, comparison, nutrientVal);
 
 		HBox ruleButtons = new HBox(30);
@@ -218,10 +221,25 @@ public class Main extends Application{
 		addFood.setId("Header");
 		Label name = new Label("Name of Food: ");	TextField nameField = new TextField();
 		Label protein = new Label("Protein(g): ");	TextField proteinField = new TextField();
+        proteinField.textProperty().addListener((observable, oldValue, newValue) -> {
+            proteinField.setText(newValue.replaceAll("[^\\d.]", ""));
+        });
 		Label calories = new Label("Calories: ");	TextField caloriesField = new TextField();
+        caloriesField.textProperty().addListener((observable, oldValue, newValue) -> {
+            caloriesField.setText(newValue.replaceAll("[^\\d.]", ""));
+        });
 		Label fiber = new Label("Fiber(g): ");		TextField fiberField = new TextField();
+        fiberField.textProperty().addListener((observable, oldValue, newValue) -> {
+            fiberField.setText(newValue.replaceAll("[^\\d.]", ""));
+        });
 		Label fat = new Label("Fat(g)");			TextField fatField = new TextField();
+        fatField.textProperty().addListener((observable, oldValue, newValue) -> {
+            fatField.setText(newValue.replaceAll("[^\\d.]", ""));
+        });
 		Label carbs = new Label("Carbs(g): ");		TextField carbsField = new TextField();
+        carbsField.textProperty().addListener((observable, oldValue, newValue) -> {
+            carbsField.setText(newValue.replaceAll("[^\\d.]", ""));
+        });
 		Button addFoodButton = new Button("ADD FOOD");
 		addFoodButton.setOnAction(eventAddFood -> {
 			String nameVal = nameField.getCharacters().toString();
