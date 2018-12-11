@@ -2,11 +2,9 @@ package application;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -78,6 +76,9 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public List<FoodItem> filterByName(String substring) {
+        if (substring.trim().equals("")) {
+            return this.foodItemList;
+        }
         return this.foodItemList
                 .stream()
                 .filter(x -> x.getName().toLowerCase().contains(substring.toLowerCase()))
@@ -136,9 +137,12 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public void saveFoodItems(String filename) {
+
+        ArrayList<String> list = new ArrayList<>(Arrays.stream(filename.split("-----")[0].split(",")).collect(Collectors.toList()));
+        ArrayList<FoodItem> toSave = new ArrayList<>(this.foodItemList.stream().filter(x -> list.contains(x.getName())).collect(Collectors.toList()));
         try {
-            Files.write(new File(filename).toPath(),
-                    this.foodItemList
+            Files.write(new File(filename.split("-----")[1]).toPath(),
+                    toSave
                         .stream()
                         .map(item -> {
                             ArrayList<String> nutrients = new ArrayList<>();
