@@ -89,7 +89,12 @@ public class Main extends Application{
 			dialog.show();
 			submitButton.setOnAction(action -> {
 				foodData.loadFoodItems(fileNameField.getCharacters().toString());
-				foodList.addAll(foodData.getAllFoodItems().stream().map(FoodItem::getName).collect(Collectors.toList()));
+                foodList.addAll(foodData.filterByNutrients(queryList)
+                        .stream()
+                        .map(FoodItem::getName)
+                        .collect(Collectors.toList())
+                );
+                dialog.close();
 			});
 		});
 		saveButton.setOnAction(event -> {
@@ -102,7 +107,10 @@ public class Main extends Application{
 			dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			dialog.setScene(dialogScene);
 			dialog.show();
-			submitButton.setOnAction(action -> foodData.saveFoodItems(fileNameField.getCharacters().toString()));
+			submitButton.setOnAction(action -> {
+                foodData.saveFoodItems(fileNameField.getCharacters().toString());
+                dialog.close();
+            });
 		});
 		slButtonBox.getChildren().addAll(saveButton, loadButton);
 		foodListBox.getChildren().addAll(foodListLabel, foodScroll, slButtonBox);
@@ -172,9 +180,23 @@ public class Main extends Application{
             foodList.clear();
             String queryString = nutrientList.getValue() + " " + comparison.getValue() + " " + nutrientVal.getCharacters().toString();
             queryList.add(queryString);
-            foodList.addAll(foodData.filterByNutrients(queryList).stream().map(FoodItem::getName).collect(Collectors.toList()));
+            foodList.addAll(foodData.filterByNutrients(queryList)
+                    .stream()
+                    .map(FoodItem::getName)
+                    .collect(Collectors.toList())
+            );
         });
 		Button resetButton = new Button("RESET");
+		resetButton.setOnAction(action -> {
+		    queryList.clear();
+		    foodList.clear();
+		    foodList.addAll(foodData.filterByNutrients(queryList)
+                    .stream()
+                    .map(FoodItem::getName)
+                    .collect(Collectors.toList())
+            );
+        });
+
 		ruleButtons.getChildren().addAll(updateButton, resetButton);
 				
 		Button seeRules = new Button("SEE RULES");
@@ -194,8 +216,11 @@ public class Main extends Application{
 				queryList.remove(selectedItem);
 				ListView<String> newRuleListView = new ListView<String>(ruleListDialog);
 				ruleScroll.setContent(newRuleListView);
-				foodList.addAll(foodData.filterByNutrients(queryList).stream().map(FoodItem::getName).collect(Collectors.toList()));
-				
+				foodList.addAll(foodData.filterByNutrients(queryList)
+                        .stream()
+                        .map(FoodItem::getName)
+                        .collect(Collectors.toList())
+                );
 			});
 			Button OK = new Button("OK");
 			OK.setOnAction(eventOK -> dialog.close());
@@ -262,7 +287,12 @@ public class Main extends Application{
 				newFood.addNutrient("carbohydrate", carbsVal);
 
 				foodData.addFoodItem(newFood);
-				foodList.add(newFood.getName());
+				foodList.clear();
+				foodList.addAll(foodData.filterByNutrients(queryList)
+                        .stream()
+                        .map(FoodItem::getName)
+                        .collect(Collectors.toList())
+                );
 			} catch (NumberFormatException e) {
 				Stage dialog = new Stage();
 				VBox dialogVBox = new VBox(20);
@@ -273,9 +303,7 @@ public class Main extends Application{
 				dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 				dialog.setScene(dialogScene);
 				dialog.show();
-				confirmButton.setOnAction(action -> {
-					dialog.close();
-				});
+				confirmButton.setOnAction(action -> dialog.close());
 			} catch (Exception e) {
                 Stage dialog = new Stage();
                 VBox dialogVBox = new VBox(20);
@@ -290,7 +318,6 @@ public class Main extends Application{
                     dialog.close();
                 });
 			}
-
 		});
 				
 		labelBox.getChildren().addAll(name, protein, calories, fiber, fat, carbs);

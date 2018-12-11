@@ -58,7 +58,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
                         return food;
                     })
                     .collect(Collectors.toList());
-            this.sortFoodItems();
+            this.sortFoodItems(this.foodItemList);
             this.foodItemList.forEach((FoodItem foodItem) -> {
                 foodItem.getNutrients().forEach((String nutrient, Double value) -> {
                     this.indexes.get(nutrient).insert(value, foodItem);
@@ -69,8 +69,8 @@ public class FoodData implements FoodDataADT<FoodItem> {
         }
     }
 
-    private void sortFoodItems() {
-        this.foodItemList.sort(Comparator.comparing((FoodItem x) -> x.getName().toLowerCase()));
+    private void sortFoodItems(List<FoodItem> list) {
+        list.sort(Comparator.comparing((FoodItem x) -> x.getName().toLowerCase()));
     }
     /*
      * (non-Javadoc)
@@ -90,12 +90,17 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public List<FoodItem> filterByNutrients(List<String> rules) {
+        if (rules.size() == 0) {
+            return this.foodItemList;
+        }
         List<List<FoodItem>> matches = rules.stream()
                 .map(rule -> rule.split(" "))
+                .filter(rule -> rule.length == 3)
                 .map(rule -> this.indexes.get(rule[0]).rangeSearch(Double.parseDouble(rule[2]), rule[1]))
                 .collect(Collectors.toList());
         if (matches.size() > 0) {
             matches.forEach(list -> matches.get(0).retainAll(list));
+            sortFoodItems(matches.get(0));
             return matches.get(0);
         } else {
             return new ArrayList<FoodItem>();
@@ -112,7 +117,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
             this.indexes.get(nutrient).insert(value, foodItem);
         });
         this.foodItemList.add(foodItem);
-        this.sortFoodItems();
+        this.sortFoodItems(this.foodItemList);
     }
 
     /*
