@@ -2,10 +2,9 @@ package application;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -22,8 +21,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     // Map of nutrients and their corresponding index
     // TODO: remake this private once it gets fixed
     public HashMap<String, BPTree<Double, FoodItem>> indexes;
-    
-    
+
     /**
      * Public constructor
      * 
@@ -31,11 +29,12 @@ public class FoodData implements FoodDataADT<FoodItem> {
     public FoodData() {
         this.foodItemList = new ArrayList<>();
         this.indexes = new HashMap<>();
-        this.indexes.put("calories", new BPTree<>(3));
-        this.indexes.put("fat", new BPTree<>(3));
-        this.indexes.put("carbohydrate", new BPTree<>(3));
-        this.indexes.put("fiber", new BPTree<>(3));
-        this.indexes.put("protein", new BPTree<>(3));
+        int BRANCHING_FACTOR = 10;
+        this.indexes.put("calories", new BPTree<>(BRANCHING_FACTOR));
+        this.indexes.put("fat", new BPTree<>(BRANCHING_FACTOR));
+        this.indexes.put("carbohydrate", new BPTree<>(BRANCHING_FACTOR));
+        this.indexes.put("fiber", new BPTree<>(BRANCHING_FACTOR));
+        this.indexes.put("protein", new BPTree<>(BRANCHING_FACTOR));
     }
 
     
@@ -48,6 +47,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
         try {
             this.foodItemList = Files.lines(new File(filePath).toPath())
                     .map(x -> x.split(","))
+                    .filter(x -> x.length == 12)
                     .map(x -> {
                         FoodItem food = new FoodItem(x[0], x[1]);
                         for (int i = 2; i < x.length; i+=2) {
@@ -56,11 +56,9 @@ public class FoodData implements FoodDataADT<FoodItem> {
                         return food;
                     })
                     .collect(Collectors.toList());
+            this.sortFoodItems(this.foodItemList);
             this.foodItemList.forEach((FoodItem foodItem) -> {
                 foodItem.getNutrients().forEach((String nutrient, Double value) -> {
-                    if (!this.indexes.containsKey(nutrient)) {
-                        this.indexes.put(nutrient, new BPTree<>(3));
-                    }
                     this.indexes.get(nutrient).insert(value, foodItem);
                 });
             });
@@ -69,15 +67,21 @@ public class FoodData implements FoodDataADT<FoodItem> {
         }
     }
 
+    private void sortFoodItems(List<FoodItem> list) {
+        list.sort(Comparator.comparing((FoodItem x) -> x.getName().toLowerCase()));
+    }
     /*
      * (non-Javadoc)
      * @see skeleton.application.FoodDataADT#filterByName(java.lang.String)
      */
     @Override
     public List<FoodItem> filterByName(String substring) {
+        if (substring.trim().equals("")) {
+            return this.foodItemList;
+        }
         return this.foodItemList
                 .stream()
-                .filter(x -> x.getName().contains(substring))
+                .filter(x -> x.getName().toLowerCase().contains(substring.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
@@ -87,12 +91,17 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public List<FoodItem> filterByNutrients(List<String> rules) {
+        if (rules.size() == 0) {
+            return this.foodItemList;
+        }
         List<List<FoodItem>> matches = rules.stream()
                 .map(rule -> rule.split(" "))
+                .filter(rule -> rule.length == 3)
                 .map(rule -> this.indexes.get(rule[0]).rangeSearch(Double.parseDouble(rule[2]), rule[1]))
                 .collect(Collectors.toList());
         if (matches.size() > 0) {
             matches.forEach(list -> matches.get(0).retainAll(list));
+            sortFoodItems(matches.get(0));
             return matches.get(0);
         } else {
             return new ArrayList<FoodItem>();
@@ -109,12 +118,10 @@ public class FoodData implements FoodDataADT<FoodItem> {
     		return;
     	}
         foodItem.getNutrients().forEach((String nutrient, Double value) -> {
-            if (!this.indexes.containsKey(nutrient)) {
-                this.indexes.put(nutrient, new BPTree<>(3));
-            }
             this.indexes.get(nutrient).insert(value, foodItem);
         });
         this.foodItemList.add(foodItem);
+        this.sortFoodItems(this.foodItemList);
     }
 
     /*
@@ -133,9 +140,12 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public void saveFoodItems(String filename) {
+
+        ArrayList<String> list = new ArrayList<>(Arrays.stream(filename.split("-----")[0].split(",")).collect(Collectors.toList()));
+        ArrayList<FoodItem> toSave = new ArrayList<>(this.foodItemList.stream().filter(x -> list.contains(x.getName())).collect(Collectors.toList()));
         try {
-            Files.write(new File(filename).toPath(),
-                    this.foodItemList
+            Files.write(new File(filename.split("-----")[1]).toPath(),
+                    toSave
                         .stream()
                         .map(item -> {
                             ArrayList<String> nutrients = new ArrayList<>();
@@ -149,7 +159,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
                             nutrients.add("" + item.getNutrientValue("fiber"));
                             nutrients.add("protein");
                             nutrients.add("" + item.getNutrientValue("protein"));
-                            return item.getID() + " " + item.getName() + "," + String.join(",", nutrients);
+                            return item.getID() + "," + item.getName() + "," + String.join(",", nutrients);
                         })
                         .collect(Collectors.toList())
             );
