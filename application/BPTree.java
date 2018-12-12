@@ -40,21 +40,6 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         this.branchingFactor = branchingFactor;
         this.root = new LeafNode();
     }
-
-    public String sequence() {
-        StringBuilder s = new StringBuilder();
-        Node node = root;
-        while (!(node instanceof BPTree.LeafNode)) {
-            node = ((InternalNode)node).children.get(((InternalNode)node).children.size() - 1);
-        }
-        while (node != null) {
-            for (V x : ((LeafNode) node).values) {
-                s.append(x);
-            }
-            node = ((LeafNode) node).previous;
-        }
-        return s.toString();
-    }
     
     /*
      * (non-Javadoc)
@@ -65,23 +50,6 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         root.insert(key, value);
     }
 
-    private LeafNode recFindNodeToInsert(K key, Node node) {
-        if (node instanceof BPTree.LeafNode) {
-            return (LeafNode)node;
-        } else {
-            if (key.compareTo(node.keys.get(0)) <= 0) {
-                return recFindNodeToInsert(key, ((InternalNode) node).children.get(0));
-            }
-            for (int i = 0; i < node.keys.size() - 1; i++) {
-                int j = key.compareTo(node.keys.get(i));
-                int k = key.compareTo(node.keys.get(i + 1));
-                if (j > 0 && (k < 0 || k == 0)) {
-                    return recFindNodeToInsert(key, ((InternalNode) node).children.get(i + 1));
-                }
-            }
-            return recFindNodeToInsert(key, ((InternalNode) node).children.get(((InternalNode) node).children.size() - 1));
-        }
-    }
     /*
      * (non-Javadoc)
      * @see application.BPTreeADT#rangeSearch(java.lang.Object, java.lang.String)
@@ -142,7 +110,6 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         // List of keys
         List<K> keys;
 
-        InternalNode parent;
         /**
          * Package constructor
          */
@@ -235,6 +202,8 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         void insert(K key, V value) {
             Node leaf = findNodeToInsertTo(key);
             leaf.insert(key, value);
+            
+            // Moves node if node's branching factor is exceeded
             if (leaf.isOverflow()) {
                 Node sibling = leaf.split();
                 insert(sibling.getFirstLeafKey(), sibling);
@@ -249,12 +218,22 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             }
         }
 
+        /**
+         * Finds node to insert
+         * @param key key to insert
+         * @return node that is inserted
+         */
         Node findNodeToInsertTo(K key) {
             int foundPos = Collections.binarySearch(keys, key);
             int nodePos = foundPos >= 0 ? foundPos + 1 : -foundPos - 1;
             return children.get(nodePos);
         }
 
+        /**
+         * inserts key into a node
+         * @param key key to be inserted
+         * @param node node to have key inserted
+         */
         void insert(K key, Node node) {
             int foundPos = Collections.binarySearch(keys, key);
             int insertPos = foundPos >= 0 ? foundPos + 1 : -foundPos - 1;
