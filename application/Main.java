@@ -91,7 +91,6 @@ public class Main extends Application{
 			dialogVBox.setPadding(new Insets(10));
 			TextField fileNameField = new TextField();
 			fileNameField.setPromptText("Enter File Name");
-			fileNameField.setFocusTraversable(false);
 			Button submitButton = new Button("LOAD");
 			dialogVBox.getChildren().addAll(fileNameField, submitButton);
 			Scene dialogScene = new Scene(dialogVBox, 300, 200);
@@ -121,6 +120,8 @@ public class Main extends Application{
 			Button submitButton = new Button("SAVE");
 			dialogVBox.getChildren().addAll(fileNameField, submitButton);
 			Scene dialogScene = new Scene(dialogVBox, 300, 200);
+			fileNameField.requestFocus();
+			fileNameField.requestFocus();
 			dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			dialog.setScene(dialogScene);
 			dialog.show();
