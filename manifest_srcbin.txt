@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Created-By: sundheim, meyer, rusnak, paquette
+Class-Path: bin
+Main-Class: application.Main
