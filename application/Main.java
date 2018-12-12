@@ -381,9 +381,14 @@ public class Main extends Application{
 				Stage dialog = new Stage();
 				dialog.setResizable(false);
 				VBox dialogVBox = new VBox(20);
-				Button confirmButton = new Button("Ok");
+				HBox buttonBox = new HBox();
+				buttonBox.setPadding(new Insets(0, 0, 0, 90));
+				dialogVBox.setPadding(new Insets(20, 0, 0, 40));
+				Button confirmButton = new Button("OK");
+				buttonBox.getChildren().addAll(confirmButton);
 				Label message = new Label("Incorrect / Missing values in Nutrients");
-				dialogVBox.getChildren().addAll(message, confirmButton);
+				message.setId("popup");
+				dialogVBox.getChildren().addAll(message, buttonBox);
 				Scene dialogScene = new Scene(dialogVBox, 300, 200);
 				dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 				dialog.setScene(dialogScene);
@@ -393,9 +398,14 @@ public class Main extends Application{
                 Stage dialog = new Stage();
                 dialog.setResizable(false);
                 VBox dialogVBox = new VBox(20);
+                HBox buttonBox = new HBox();
+                buttonBox.setPadding(new Insets(0, 0, 0, 40));
+				dialogVBox.setPadding(new Insets(20, 0, 0, 90));
                 Label message = new Label("Missing Food Name");
-                Button confirmButton = new Button("Ok");
-                dialogVBox.getChildren().addAll(message, confirmButton);
+                message.setId("popup");
+                Button confirmButton = new Button("OK");
+                buttonBox.getChildren().addAll(confirmButton);
+                dialogVBox.getChildren().addAll(message, buttonBox);
                 Scene dialogScene = new Scene(dialogVBox, 300, 200);
                 dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
                 dialog.setScene(dialogScene);
@@ -404,6 +414,13 @@ public class Main extends Application{
                     dialog.close();
                 });
 			}
+			
+			nameField.setText("");
+			proteinField.setText("");
+			caloriesField.setText("");
+			fiberField.setText("");
+			fatField.setText("");
+			carbsField.setText("");
 		});
 				
 		labelBox.getChildren().addAll(name, protein, calories, fiber, fat, carbs);
