@@ -212,6 +212,7 @@ public class Main extends Application{
 		Label rules = new Label("RULES:");
 		rules.setId("Header");
 		TextField nameFilter = new TextField();
+		nameFilter.setMaxWidth(242);
 		nameFilter.textProperty().addListener((observable, oldValue, newValue) -> {
 		    filterString = newValue;
             foodList.clear();
