@@ -199,6 +199,7 @@ public class Main extends Application{
             );
             Button confirmButton = new Button("OK");
             dialogVBox.getChildren().addAll(message, proteinInfo, caloriesInfo, fiberInfo, fatInfo, carbInfo, confirmButton);
+            dialogVBox.setAlignment(Pos.TOP_CENTER);
             Scene dialogScene = new Scene(dialogVBox, 300, 300);
             dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             dialog.setScene(dialogScene);
