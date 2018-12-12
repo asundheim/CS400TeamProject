@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Main extends Application{
@@ -79,7 +80,7 @@ public class Main extends Application{
 		foodScroll.setPrefHeight(400);
 		foodScroll.setPrefWidth(230);
 
-		HBox slButtonBox = new HBox(80);
+		HBox slButtonBox = new HBox(95);
 		Button saveButton = new Button("SAVE");
 		Button loadButton = new Button("LOAD");
 		loadButton.setOnAction(event -> {
@@ -147,7 +148,7 @@ public class Main extends Application{
         });
         addBox.getChildren().add(addButton);
         ////////////////////////////////
-		HBox raButtonBox = new HBox(10);
+		HBox raButtonBox = new HBox(30);
 		Button removeButton = new Button("REMOVE");
 		removeButton.setOnAction(action -> {
             if (list2.getSelectionModel().getSelectedItem() != null) {
@@ -291,12 +292,13 @@ public class Main extends Application{
 			});
 			Button OK = new Button("OK");
 			OK.setOnAction(eventOK -> dialog.close());
-			HBox dialogButtonBox = new HBox(80);
-			dialogButtonBox.setPadding(new Insets(0, 0, 0, 30));
+			HBox dialogButtonBox = new HBox(50);
+			dialogButtonBox.setPadding(new Insets(0, 0, 0, 20));
 			dialogButtonBox.getChildren().addAll(removeRule, OK);
 					
 			dialogVBox.getChildren().addAll(ruleScroll, dialogButtonBox);
 			Scene dialogScene = new Scene(dialogVBox, 250, 375);
+			dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			dialog.setScene(dialogScene);
 			dialog.show();
 		});
@@ -321,9 +323,6 @@ public class Main extends Application{
             caloriesField.setText(newValue.replaceAll("[^\\d.]", ""));
         });
 		Label fiber = new Label("Fiber(g): ");		TextField fiberField = new TextField();
-<<<<<<< HEAD
-		Label fat = new Label("Fat(g): ");			TextField fatField = new TextField();
-=======
         fiberField.textProperty().addListener((observable, oldValue, newValue) -> {
             fiberField.setText(newValue.replaceAll("[^\\d.]", ""));
         });
@@ -331,46 +330,13 @@ public class Main extends Application{
         fatField.textProperty().addListener((observable, oldValue, newValue) -> {
             fatField.setText(newValue.replaceAll("[^\\d.]", ""));
         });
->>>>>>> dd75b0edfa6408b8a157f350ab157596084c7fa6
 		Label carbs = new Label("Carbs(g): ");		TextField carbsField = new TextField();
         carbsField.textProperty().addListener((observable, oldValue, newValue) -> {
             carbsField.setText(newValue.replaceAll("[^\\d.]", ""));
         });
 		Button addFoodButton = new Button("ADD FOOD");
 		addFoodButton.setOnAction(eventAddFood -> {
-<<<<<<< HEAD
-			String nameVal = nameField.getCharacters().toString();
-			Double proteinVal = Double.parseDouble(proteinField.getCharacters().toString());
-			Double caloriesVal = Double.parseDouble(caloriesField.getCharacters().toString());
-			Double fiberVal = Double.parseDouble(fiberField.getCharacters().toString());
-			Double fatVal = Double.parseDouble(fatField.getCharacters().toString());
-			Double carbsVal = Double.parseDouble(carbsField.getCharacters().toString());
-			String idVal = "" + foodCounter++;
 			
-			FoodItem newFood = new FoodItem(idVal, nameVal);
-			newFood.addNutrient("protein", proteinVal);
-			newFood.addNutrient("calories", caloriesVal);
-			newFood.addNutrient("fiber", fiberVal);
-			newFood.addNutrient("fat", fatVal);
-			newFood.addNutrient("carbs", carbsVal);
-			
-			// Empty the textFields
-			nameField.setText("");
-			proteinField.setText("");
-			caloriesField.setText("");
-			fiberField.setText("");
-			fatField.setText("");
-			carbsField.setText("");
-			
-			foodData.addFoodItem(newFood);
-			ObservableList<String> newFoodList = FXCollections.observableList(new ArrayList<String>());
-			List<FoodItem> newFoodItems = foodData.getAllFoodItems();
-			for (int i = 0; i < newFoodItems.size(); i++) {
-				newFoodList.add(newFoodItems.get(i).getName());
-			}
-			ListView<String> newList = new ListView<String>(newFoodList);
-			foodScroll.setContent(newList);
-=======
 			try {
 				String nameVal = nameField.getCharacters().toString();
 				if (nameVal.trim().equals("")) {
@@ -423,7 +389,6 @@ public class Main extends Application{
                     dialog.close();
                 });
 			}
->>>>>>> dd75b0edfa6408b8a157f350ab157596084c7fa6
 		});
 				
 		labelBox.getChildren().addAll(name, protein, calories, fiber, fat, carbs);
