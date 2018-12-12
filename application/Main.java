@@ -87,6 +87,8 @@ public class Main extends Application{
 			Stage dialog = new Stage();
 			VBox dialogVBox = new VBox(20);
 			TextField fileNameField = new TextField();
+			fileNameField.setPromptText("Enter File Name");
+			fileNameField.setFocusTraversable(false);
 			Button submitButton = new Button("LOAD");
 			dialogVBox.getChildren().addAll(fileNameField, submitButton);
 			Scene dialogScene = new Scene(dialogVBox, 300, 200);
