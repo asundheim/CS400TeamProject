@@ -83,6 +83,7 @@ public class Main extends Application{
 			foodList.add(foodItems.get(i).getName());
 		}
 		
+		
 		ListView<String> list = new ListView<String>(foodList);
 		foodScroll.getChildren().addAll(list);
 		foodScroll.setPrefHeight(400);
