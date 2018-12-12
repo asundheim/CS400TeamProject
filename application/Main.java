@@ -272,17 +272,19 @@ public class Main extends Application{
 			VBox dialogVBox = new VBox(20);
 			ObservableList<String> ruleListDialog = FXCollections.observableList(queryList);				
 			ListView<String> ruleListView = new ListView<String>(ruleListDialog);
-			ScrollPane ruleScroll = new ScrollPane();
+			Pane ruleScroll = new Pane();
 			ruleScroll.setMaxWidth(250);
 			ruleScroll.setMaxHeight(300);
-			ruleScroll.setContent(ruleListView);
+			ruleScroll.getChildren().addAll(ruleListView);
 
 			Button removeRule = new Button("REMOVE");
 			removeRule.setOnAction(eventRemove -> {
 				String selectedItem = ruleListView.getSelectionModel().getSelectedItem();
+                ruleListDialog.remove(selectedItem);
 				queryList.remove(selectedItem);
-				ListView<String> newRuleListView = new ListView<String>(ruleListDialog);
-				ruleScroll.setContent(newRuleListView);
+				//
+				/*ListView<String> newRuleListView = new ListView<String>(ruleListDialog);
+				ruleScroll.setContent(newRuleListView);*/
 				foodList.addAll(foodData.filterByNutrients(queryList)
                         .stream()
                         .filter(x -> foodData.filterByName(filterString).contains(x))
