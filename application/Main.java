@@ -48,7 +48,6 @@ public class Main extends Application{
 		BorderPane root = new BorderPane();
 		Scene scene1 = new Scene(root, 1000, 700);
 		scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-		
 		// Banner at top of window
 		VBox topBox = new VBox();
 		topBox.setId("topbox");
@@ -86,6 +85,7 @@ public class Main extends Application{
 		Button loadButton = new Button("LOAD");
 		loadButton.setOnAction(event -> {
 			Stage dialog = new Stage();
+			dialog.setResizable(false);
 			VBox dialogVBox = new VBox(20);
 			dialogVBox.setAlignment(Pos.TOP_CENTER);
 			dialogVBox.setPadding(new Insets(10));
@@ -111,6 +111,7 @@ public class Main extends Application{
 		});
 		saveButton.setOnAction(event -> {
 			Stage dialog = new Stage();
+			dialog.setResizable(false);
 			VBox dialogVBox = new VBox(20);
 			TextField fileNameField = new TextField();
 			Button submitButton = new Button("SAVE");
@@ -168,6 +169,7 @@ public class Main extends Application{
                     .collect(Collectors.toList())
             );
             Stage dialog = new Stage();
+            dialog.setResizable(false);
             VBox dialogVBox = new VBox(20);
             Label message = new Label("Kowalski: Analysis");
             message.setId("Header");
@@ -198,7 +200,7 @@ public class Main extends Application{
             );
             Button confirmButton = new Button("OK");
             dialogVBox.getChildren().addAll(message, proteinInfo, caloriesInfo, fiberInfo, fatInfo, carbInfo, confirmButton);
-            dialogVBox.setAlignment(Pos.BASELINE_CENTER);
+            dialogVBox.setAlignment(Pos.TOP_CENTER);
             Scene dialogScene = new Scene(dialogVBox, 300, 300);
             dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             dialog.setScene(dialogScene);
@@ -277,6 +279,7 @@ public class Main extends Application{
 		Button seeRules = new Button("SEE RULES");
 		seeRules.setOnAction(event -> {
 			Stage dialog = new Stage();
+			dialog.setResizable(false);
 			VBox dialogVBox = new VBox(20);
 			ObservableList<String> ruleListDialog = FXCollections.observableList(queryList);				
 			ListView<String> ruleListView = new ListView<String>(ruleListDialog);
@@ -376,6 +379,7 @@ public class Main extends Application{
                 );
 			} catch (NumberFormatException e) {
 				Stage dialog = new Stage();
+				dialog.setResizable(false);
 				VBox dialogVBox = new VBox(20);
 				Button confirmButton = new Button("Ok");
 				Label message = new Label("Incorrect / Missing values in Nutrients");
@@ -387,6 +391,7 @@ public class Main extends Application{
 				confirmButton.setOnAction(action -> dialog.close());
 			} catch (Exception e) {
                 Stage dialog = new Stage();
+                dialog.setResizable(false);
                 VBox dialogVBox = new VBox(20);
                 Label message = new Label("Missing Food Name");
                 Button confirmButton = new Button("Ok");
@@ -416,7 +421,7 @@ public class Main extends Application{
 		leftPane.getChildren().addAll(ruleList, addFoodBox);
 		root.setLeft(leftPane);
 		////////////////////////////
-				
+		arg0.setResizable(false);
 		arg0.setScene(scene1);
 		arg0.show();
 	}
