@@ -80,7 +80,7 @@ public class Main extends Application{
 		foodScroll.setPrefHeight(400);
 		foodScroll.setPrefWidth(230);
 
-		HBox slButtonBox = new HBox(95);
+		HBox slButtonBox = new HBox(106);
 		Button saveButton = new Button("SAVE");
 		Button loadButton = new Button("LOAD");
 		loadButton.setOnAction(event -> {
@@ -145,7 +145,7 @@ public class Main extends Application{
 		mealScroll.setMaxWidth(230);
         ///////// ADD BUTTON ///////////
         VBox addBox = new VBox();
-        addBox.setPadding(new Insets(200,0,0,10));
+        addBox.setPadding(new Insets(200,0,0,0));
         Button addButton = new Button("ADD");
         addButton.setOnAction(action -> {
             if (list.getSelectionModel().getSelectedItem() != null) {
