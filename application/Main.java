@@ -50,7 +50,7 @@ public class Main extends Application{
 	    foodData = new FoodData();
 		// Set up window
 		BorderPane root = new BorderPane();
-		Scene scene1 = new Scene(root, 1000, 700);
+		Scene scene1 = new Scene(root, 1000, 750);
 		scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		// Banner at top of window
 		VBox topBox = new VBox();
@@ -79,9 +79,10 @@ public class Main extends Application{
 		Pane foodScroll = new Pane();
 		ObservableList<String> foodList = FXCollections.observableList(new ArrayList<String>());
 		List<FoodItem> foodItems = foodData.getAllFoodItems();
+        Label numFoods = new Label("Food Items: " + foodList.size());
 		//add all food items to the list
 		foodList.addAll(foodItems.stream().map(FoodItem::getName).collect(Collectors.toList()));
-
+        updateFoodSize(numFoods, foodList.size());
 		//made list viewable
 		ListView<String> list = new ListView<String>(foodList);
 		foodScroll.getChildren().addAll(list);
@@ -93,6 +94,7 @@ public class Main extends Application{
 		//setup save and load buttons
 		Button saveButton = new Button("SAVE");
 		Button loadButton = new Button("LOAD");
+
 		//when load button is pressed...
 		loadButton.setOnAction(event -> {
 			//open a new dialog
@@ -121,6 +123,7 @@ public class Main extends Application{
                         .map(FoodItem::getName)
                         .collect(Collectors.toList())
                 );
+                updateFoodSize(numFoods, foodList.size());
                 //close the dialog box
                 dialog.close();
 			});
@@ -152,10 +155,11 @@ public class Main extends Application{
                 dialog.close();
             });
 		});
+
 		//add buttons to the box
 		slButtonBox.getChildren().addAll(saveButton, loadButton);
 		//add everything to the food list box
-		foodListBox.getChildren().addAll(foodListLabel, foodScroll, slButtonBox);
+		foodListBox.getChildren().addAll(foodListLabel, foodScroll, slButtonBox, numFoods);
 		////////////////////////////////
 
 
@@ -287,6 +291,7 @@ public class Main extends Application{
                     .map(FoodItem::getName)
                     .collect(Collectors.toList())
             );
+            updateFoodSize(numFoods, foodList.size());
 		});
 				
 		//setup drop down menu for defining rules
@@ -327,6 +332,7 @@ public class Main extends Application{
                     .map(FoodItem::getName)
                     .collect(Collectors.toList())
             );
+            updateFoodSize(numFoods, foodList.size());
         });
 		//create reset button to clear rules
 		Button resetButton = new Button("RESET");
@@ -342,6 +348,7 @@ public class Main extends Application{
                     .map(FoodItem::getName)
                     .collect(Collectors.toList())
             );
+            updateFoodSize(numFoods, foodList.size());
         });
 
 		//add rule buttons
@@ -380,6 +387,7 @@ public class Main extends Application{
                         .map(FoodItem::getName)
                         .collect(Collectors.toList())
                 );
+                updateFoodSize(numFoods, foodList.size());
 			});
 			//create ok button
 			Button OK = new Button("OK");
@@ -431,6 +439,8 @@ public class Main extends Application{
         carbsField.textProperty().addListener((observable, oldValue, newValue) -> {
             carbsField.setText(newValue.replaceAll("[^\\d.]", ""));
         });
+        Label id = new Label("Id: "); 				TextField idField = new TextField();
+
         //add food button
 		Button addFoodButton = new Button("ADD FOOD");
 		//when food button is pressed...
@@ -438,7 +448,8 @@ public class Main extends Application{
 			//try to parse the inputs as numbers 
 			try {
 				String nameVal = nameField.getCharacters().toString();
-				if (nameVal.trim().equals("")) {
+                String idVal = idField.getCharacters().toString();
+				if (nameVal.trim().equals("") || idVal.trim().equals("")) {
 					throw new Exception();
 				}
 				double proteinVal = Double.parseDouble(proteinField.getCharacters().toString());
@@ -446,7 +457,7 @@ public class Main extends Application{
 				double fiberVal = Double.parseDouble(fiberField.getCharacters().toString());
 				double fatVal = Double.parseDouble(fatField.getCharacters().toString());
 				double carbsVal = Double.parseDouble(carbsField.getCharacters().toString());
-				String idVal = "" + foodCounter++;
+
 
 				//add the nutrients to the new food item
 				FoodItem newFood = new FoodItem(idVal, nameVal);
@@ -465,6 +476,7 @@ public class Main extends Application{
                         .map(FoodItem::getName)
                         .collect(Collectors.toList())
                 );
+                updateFoodSize(numFoods, foodList.size());
 			//if a number cannot be parsed correctly...
 			} catch (NumberFormatException e) {
 				//create a dialog to inform the user they have invalid input
@@ -493,7 +505,7 @@ public class Main extends Application{
                 HBox buttonBox = new HBox();
                 buttonBox.setPadding(new Insets(0, 0, 0, 40));
 				dialogVBox.setPadding(new Insets(20, 0, 0, 90));
-                Label message = new Label("Missing Food Name");
+                Label message = new Label("Missing Food Name or Id");
                 message.setId("popup");
                 Button confirmButton = new Button("OK");
                 buttonBox.getChildren().addAll(confirmButton);
@@ -516,9 +528,9 @@ public class Main extends Application{
 		});
 				
 		//add everything to the appropriate boxes
-		labelBox.getChildren().addAll(name, protein, calories, fiber, fat, carbs);
+		labelBox.getChildren().addAll(name, protein, calories, fiber, fat, carbs, id);
 		fieldBox.getChildren().addAll(nameField, proteinField, caloriesField, 
-				fiberField, fatField, carbsField);
+				fiberField, fatField, carbsField, idField);
 		
 		labelFieldBox.getChildren().addAll(labelBox, fieldBox);
 		addFoodBox.getChildren().addAll(addFood, labelFieldBox, addFoodButton);
@@ -537,7 +549,10 @@ public class Main extends Application{
 		arg0.setScene(scene1);
 		arg0.show();
 	}
-	
+
+	public void updateFoodSize(Label label, int size) {
+	    label.setText("Food items: " + size);
+    }
 	/*
 	 * initialize the program
 	 */

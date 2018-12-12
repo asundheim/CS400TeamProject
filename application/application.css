@@ -14,7 +14,7 @@
 
 #Header {
 	-fx-font: bold 18 Times;
-	
+
 }
 
 #popup {
@@ -26,6 +26,7 @@
 	-fx-min-width: 800;
 	-fx-font: bold 35 Times;
 	-fx-text-fill: white;
+
 }
 
 #topbox {
@@ -42,6 +43,9 @@
 
 #centerpane {
 	-fx-padding: 40, 0, 0, 40;
+	-fx-border-color: black;
+	-fx-border-width: 3;
+	-fx-border-style: solid;
 }
 
 .button {

@@ -19,7 +19,6 @@ public class FoodDataTest {
         FoodData foodData = new FoodData();
         foodData.loadFoodItems("foodItemsTestData.csv");
         assertEquals(15, foodData.getAllFoodItems().size());
-        System.out.println(foodData.indexes.get("calories"));
         ArrayList<String> rules = new ArrayList<>();
         rules.add("calories <= 90.0");
         assertEquals(3, foodData.filterByNutrients(rules).size());
