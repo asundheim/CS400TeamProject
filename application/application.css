@@ -17,6 +17,10 @@
 	
 }
 
+#popup {
+	-fx-font: bold 14 Times;
+}
+
 #Title {
 	-fx-text-alignment: center;
 	-fx-min-width: 800;

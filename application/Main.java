@@ -88,7 +88,7 @@ public class Main extends Application{
 		foodScroll.setPrefHeight(400);
 		foodScroll.setPrefWidth(230);
 
-		HBox slButtonBox = new HBox(106);
+		HBox slButtonBox = new HBox(98);
 		Button saveButton = new Button("SAVE");
 		Button loadButton = new Button("LOAD");
 		loadButton.setOnAction(event -> {
@@ -121,7 +121,11 @@ public class Main extends Application{
 			Stage dialog = new Stage();
 			dialog.setResizable(false);
 			VBox dialogVBox = new VBox(20);
+			dialogVBox.setAlignment(Pos.TOP_CENTER);
+			dialogVBox.setPadding(new Insets(10));
 			TextField fileNameField = new TextField();
+			fileNameField.setPromptText("Enter File Name");
+			fileNameField.setFocusTraversable(false);
 			Button submitButton = new Button("SAVE");
 			dialogVBox.getChildren().addAll(fileNameField, submitButton);
 			Scene dialogScene = new Scene(dialogVBox, 300, 200);
@@ -162,7 +166,7 @@ public class Main extends Application{
         });
         addBox.getChildren().add(addButton);
         ////////////////////////////////
-		HBox raButtonBox = new HBox(44);
+		HBox raButtonBox = new HBox(30);
 		Button removeButton = new Button("REMOVE");
 		removeButton.setOnAction(action -> {
             if (list2.getSelectionModel().getSelectedItem() != null) {
@@ -232,6 +236,7 @@ public class Main extends Application{
 		Label rules = new Label("RULES:");
 		rules.setId("Header");
 		TextField nameFilter = new TextField();
+		nameFilter.setPromptText("Filter By Name");
 		nameFilter.setMaxWidth(242);
 		nameFilter.textProperty().addListener((observable, oldValue, newValue) -> {
 		    filterString = newValue;
@@ -262,6 +267,7 @@ public class Main extends Application{
 
 		HBox ruleButtons = new HBox(30);
 		Button updateButton = new Button("ADD RULE");
+		updateButton.setMinWidth(125);
 		updateButton.setOnAction(event -> {
             foodList.clear();
             String queryString = nutrientList.getValue() + " " + comparison.getValue() + " " + nutrientVal.getCharacters().toString();
@@ -288,6 +294,7 @@ public class Main extends Application{
 		ruleButtons.getChildren().addAll(updateButton, resetButton);
 
 		Button seeRules = new Button("SEE RULES");
+		seeRules.setMinWidth(125);
 		seeRules.setOnAction(event -> {
 			Stage dialog = new Stage();
 			dialog.setResizable(false);
@@ -392,9 +399,14 @@ public class Main extends Application{
 				Stage dialog = new Stage();
 				dialog.setResizable(false);
 				VBox dialogVBox = new VBox(20);
-				Button confirmButton = new Button("Ok");
+				HBox buttonBox = new HBox();
+				buttonBox.setPadding(new Insets(0, 0, 0, 90));
+				dialogVBox.setPadding(new Insets(20, 0, 0, 40));
+				Button confirmButton = new Button("OK");
+				buttonBox.getChildren().addAll(confirmButton);
 				Label message = new Label("Incorrect / Missing values in Nutrients");
-				dialogVBox.getChildren().addAll(message, confirmButton);
+				message.setId("popup");
+				dialogVBox.getChildren().addAll(message, buttonBox);
 				Scene dialogScene = new Scene(dialogVBox, 300, 200);
 				dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 				dialog.setScene(dialogScene);
@@ -404,9 +416,14 @@ public class Main extends Application{
                 Stage dialog = new Stage();
                 dialog.setResizable(false);
                 VBox dialogVBox = new VBox(20);
+                HBox buttonBox = new HBox();
+                buttonBox.setPadding(new Insets(0, 0, 0, 40));
+				dialogVBox.setPadding(new Insets(20, 0, 0, 90));
                 Label message = new Label("Missing Food Name");
-                Button confirmButton = new Button("Ok");
-                dialogVBox.getChildren().addAll(message, confirmButton);
+                message.setId("popup");
+                Button confirmButton = new Button("OK");
+                buttonBox.getChildren().addAll(confirmButton);
+                dialogVBox.getChildren().addAll(message, buttonBox);
                 Scene dialogScene = new Scene(dialogVBox, 300, 200);
                 dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
                 dialog.setScene(dialogScene);
@@ -415,6 +432,13 @@ public class Main extends Application{
                     dialog.close();
                 });
 			}
+			
+			nameField.setText("");
+			proteinField.setText("");
+			caloriesField.setText("");
+			fiberField.setText("");
+			fatField.setText("");
+			carbsField.setText("");
 		});
 				
 		labelBox.getChildren().addAll(name, protein, calories, fiber, fat, carbs);
