@@ -45,7 +45,7 @@ public class Main extends Application{
 	    foodData = new FoodData();
 		// Set up window
 		BorderPane root = new BorderPane();
-		Scene scene1 = new Scene(root, 975, 700);
+		Scene scene1 = new Scene(root, 1000, 700);
 		scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		
 		// Banner at top of window
