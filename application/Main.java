@@ -169,6 +169,7 @@ public class Main extends Application{
             );
             Stage dialog = new Stage();
             VBox dialogVBox = new VBox(20);
+            HBox okButton = new HBox(20);
             Label message = new Label("Kowalski: Analysis");
             Label proteinInfo = new Label(selectedItems
                     .stream()
@@ -197,6 +198,7 @@ public class Main extends Application{
             );
             Button confirmButton = new Button("OK");
             dialogVBox.getChildren().addAll(message, proteinInfo, caloriesInfo, fiberInfo, fatInfo, carbInfo, confirmButton);
+            dialogVBox.setAlignment(Pos.TOP_CENTER);
             Scene dialogScene = new Scene(dialogVBox, 300, 300);
             dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             dialog.setScene(dialogScene);
