@@ -80,7 +80,7 @@ public class Main extends Application{
 		foodScroll.setPrefHeight(400);
 		foodScroll.setPrefWidth(230);
 
-		HBox slButtonBox = new HBox(106);
+		HBox slButtonBox = new HBox(98);
 		Button saveButton = new Button("SAVE");
 		Button loadButton = new Button("LOAD");
 		loadButton.setOnAction(event -> {
@@ -113,7 +113,11 @@ public class Main extends Application{
 			Stage dialog = new Stage();
 			dialog.setResizable(false);
 			VBox dialogVBox = new VBox(20);
+			dialogVBox.setAlignment(Pos.TOP_CENTER);
+			dialogVBox.setPadding(new Insets(10));
 			TextField fileNameField = new TextField();
+			fileNameField.setPromptText("Enter File Name");
+			fileNameField.setFocusTraversable(false);
 			Button submitButton = new Button("SAVE");
 			dialogVBox.getChildren().addAll(fileNameField, submitButton);
 			Scene dialogScene = new Scene(dialogVBox, 300, 200);
@@ -254,6 +258,7 @@ public class Main extends Application{
 
 		HBox ruleButtons = new HBox(30);
 		Button updateButton = new Button("ADD RULE");
+		updateButton.setMinWidth(125);
 		updateButton.setOnAction(event -> {
             foodList.clear();
             String queryString = nutrientList.getValue() + " " + comparison.getValue() + " " + nutrientVal.getCharacters().toString();
@@ -280,6 +285,7 @@ public class Main extends Application{
 		ruleButtons.getChildren().addAll(updateButton, resetButton);
 
 		Button seeRules = new Button("SEE RULES");
+		seeRules.setMinWidth(125);
 		seeRules.setOnAction(event -> {
 			Stage dialog = new Stage();
 			dialog.setResizable(false);
