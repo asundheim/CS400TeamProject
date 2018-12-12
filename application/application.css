@@ -6,6 +6,12 @@
 	-fx-font: 14 Times;
 }
 
+.vbox {
+	-fx-border-color: black;
+	-fx-border-width: 3;
+	-fx-border-style: solid;
+}
+
 #Header {
 	-fx-font: bold 18 Times;
 	

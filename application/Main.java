@@ -130,10 +130,6 @@ public class Main extends Application{
 		ScrollPane mealScroll = new ScrollPane();
 		ObservableList<String> mealList = FXCollections.observableList(new ArrayList<String>());
 		ListView<String> list2 = new ListView<String>(mealList);
-		//TODO: DELETE WHEN DONE
-		mealList.add("Los dulces");
-		mealList.add("La galleta");
-		mealList.add("El flan");
 		mealScroll.setContent(list2);
 		mealScroll.setPrefHeight(400);
 		mealScroll.setMaxWidth(230);
@@ -229,7 +225,7 @@ public class Main extends Application{
 		Label protein = new Label("Protein(g): ");	TextField proteinField = new TextField();
 		Label calories = new Label("Calories: ");	TextField caloriesField = new TextField();
 		Label fiber = new Label("Fiber(g): ");		TextField fiberField = new TextField();
-		Label fat = new Label("Fat(g)");			TextField fatField = new TextField();
+		Label fat = new Label("Fat(g): ");			TextField fatField = new TextField();
 		Label carbs = new Label("Carbs(g): ");		TextField carbsField = new TextField();
 		Button addFoodButton = new Button("ADD FOOD");
 		addFoodButton.setOnAction(eventAddFood -> {
