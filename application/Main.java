@@ -139,7 +139,7 @@ public class Main extends Application{
 		mealScroll.setMaxWidth(230);
         ///////// ADD BUTTON ///////////
         VBox addBox = new VBox();
-        addBox.setPadding(new Insets(150,0,0,0));
+        addBox.setPadding(new Insets(200,0,0,10));
         Button addButton = new Button("ADD");
         addButton.setOnAction(action -> {
             if (list.getSelectionModel().getSelectedItem() != null) {
@@ -148,7 +148,7 @@ public class Main extends Application{
         });
         addBox.getChildren().add(addButton);
         ////////////////////////////////
-		HBox raButtonBox = new HBox(30);
+		HBox raButtonBox = new HBox(44);
 		Button removeButton = new Button("REMOVE");
 		removeButton.setOnAction(action -> {
             if (list2.getSelectionModel().getSelectedItem() != null) {
