@@ -71,10 +71,8 @@ public class Main extends Application{
 		Pane foodScroll = new Pane();
 		ObservableList<String> foodList = FXCollections.observableList(new ArrayList<String>());
 		List<FoodItem> foodItems = foodData.getAllFoodItems();
-		for (int i = 0; i < foodItems.size(); i++) {
-			foodList.add(foodItems.get(i).getName());
-		}
-		
+		foodList.addAll(foodItems.stream().map(FoodItem::getName).collect(Collectors.toList()));
+
 		ListView<String> list = new ListView<String>(foodList);
 		foodScroll.getChildren().addAll(list);
 		foodScroll.setPrefHeight(400);
