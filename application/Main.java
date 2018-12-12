@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -86,6 +87,8 @@ public class Main extends Application{
 		loadButton.setOnAction(event -> {
 			Stage dialog = new Stage();
 			VBox dialogVBox = new VBox(20);
+			dialogVBox.setAlignment(Pos.TOP_CENTER);
+			dialogVBox.setPadding(new Insets(10));
 			TextField fileNameField = new TextField();
 			fileNameField.setPromptText("Enter File Name");
 			fileNameField.setFocusTraversable(false);
@@ -166,6 +169,7 @@ public class Main extends Application{
             );
             Stage dialog = new Stage();
             VBox dialogVBox = new VBox(20);
+            HBox okButton = new HBox(20);
             Label message = new Label("Kowalski: Analysis");
             Label proteinInfo = new Label(selectedItems
                     .stream()
@@ -194,6 +198,7 @@ public class Main extends Application{
             );
             Button confirmButton = new Button("OK");
             dialogVBox.getChildren().addAll(message, proteinInfo, caloriesInfo, fiberInfo, fatInfo, carbInfo, confirmButton);
+            dialogVBox.setAlignment(Pos.TOP_CENTER);
             Scene dialogScene = new Scene(dialogVBox, 300, 300);
             dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             dialog.setScene(dialogScene);
