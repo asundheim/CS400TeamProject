@@ -41,6 +41,10 @@ public class Main extends Application{
 	private String filterString = "";
 	private static int foodCounter;
 
+	/**
+	 * Start method to run the entire program
+	 * @param arg0 the main stage in which the program resides
+	 */
 	@Override
 	public void start(Stage arg0) throws Exception {
 	    foodData = new FoodData();
@@ -52,6 +56,7 @@ public class Main extends Application{
 		VBox topBox = new VBox();
 		topBox.setId("topbox");
 		topBox.setBackground(new Background(new BackgroundFill(Color.rgb(13, 44, 94), null, null)));
+		// Title
 		Label title = new Label("MEAL MAKER 9000");
 		title.setId("Title");
 		topBox.setMinHeight(50);
@@ -59,15 +64,18 @@ public class Main extends Application{
 		root.setTop(topBox);
 		
 		// Center Pane ///////////
+		
 		HBox centerPane = new HBox(20);
 		centerPane.setId("centerpane");
 
 		
 		///////// FOOD LIST ////////////
+		// Setup food list box
 		VBox foodListBox = new VBox(5);
 		Label foodListLabel = new Label("FOOD LIST:");
 		foodListLabel.setId("Header");
-
+		
+		// Setup scroll-able box to view food items
 		Pane foodScroll = new Pane();
 		ObservableList<String> foodList = FXCollections.observableList(new ArrayList<String>());
 		List<FoodItem> foodItems = foodData.getAllFoodItems();
@@ -78,7 +86,7 @@ public class Main extends Application{
 		foodScroll.setPrefHeight(400);
 		foodScroll.setPrefWidth(230);
 
-		HBox slButtonBox = new HBox(106);
+		HBox slButtonBox = new HBox(98);
 		Button saveButton = new Button("SAVE");
 		Button loadButton = new Button("LOAD");
 		loadButton.setOnAction(event -> {
@@ -111,7 +119,11 @@ public class Main extends Application{
 			Stage dialog = new Stage();
 			dialog.setResizable(false);
 			VBox dialogVBox = new VBox(20);
+			dialogVBox.setAlignment(Pos.TOP_CENTER);
+			dialogVBox.setPadding(new Insets(10));
 			TextField fileNameField = new TextField();
+			fileNameField.setPromptText("Enter File Name");
+			fileNameField.setFocusTraversable(false);
 			Button submitButton = new Button("SAVE");
 			dialogVBox.getChildren().addAll(fileNameField, submitButton);
 			Scene dialogScene = new Scene(dialogVBox, 300, 200);
@@ -222,6 +234,7 @@ public class Main extends Application{
 		Label rules = new Label("RULES:");
 		rules.setId("Header");
 		TextField nameFilter = new TextField();
+		nameFilter.setPromptText("Filter By Name");
 		nameFilter.setMaxWidth(242);
 		nameFilter.textProperty().addListener((observable, oldValue, newValue) -> {
 		    filterString = newValue;
@@ -252,6 +265,7 @@ public class Main extends Application{
 
 		HBox ruleButtons = new HBox(30);
 		Button updateButton = new Button("ADD RULE");
+		updateButton.setMinWidth(125);
 		updateButton.setOnAction(event -> {
             foodList.clear();
             String queryString = nutrientList.getValue() + " " + comparison.getValue() + " " + nutrientVal.getCharacters().toString();
@@ -278,6 +292,7 @@ public class Main extends Application{
 		ruleButtons.getChildren().addAll(updateButton, resetButton);
 
 		Button seeRules = new Button("SEE RULES");
+		seeRules.setMinWidth(125);
 		seeRules.setOnAction(event -> {
 			Stage dialog = new Stage();
 			dialog.setResizable(false);
