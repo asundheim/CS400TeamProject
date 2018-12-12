@@ -198,9 +198,12 @@ public class Main extends Application{
                     .mapToDouble(x -> x.getNutrientValue("carbohydrate"))
                     .sum() + " grams of carbohydrates"
             );
+            HBox buttonBox = new HBox();
+            buttonBox.setAlignment(Pos.CENTER);
             Button confirmButton = new Button("OK");
-            dialogVBox.getChildren().addAll(message, proteinInfo, caloriesInfo, fiberInfo, fatInfo, carbInfo, confirmButton);
-            dialogVBox.setAlignment(Pos.TOP_CENTER);
+            buttonBox.getChildren().add(confirmButton);
+            dialogVBox.getChildren().addAll(message, proteinInfo, caloriesInfo, fiberInfo, fatInfo, carbInfo, buttonBox);
+            dialogVBox.setPadding(new Insets(10));;
             Scene dialogScene = new Scene(dialogVBox, 300, 300);
             dialogScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             dialog.setScene(dialogScene);
