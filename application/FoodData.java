@@ -19,8 +19,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     private List<FoodItem> foodItemList;
 
     // Map of nutrients and their corresponding index
-    // TODO: remake this private once it gets fixed
-    public HashMap<String, BPTree<Double, FoodItem>> indexes;
+    private HashMap<String, BPTree<Double, FoodItem>> indexes;
 
     /**
      * Public constructor
@@ -45,6 +44,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     @Override
     public void loadFoodItems(String filePath) {
         try {
+        	// Creates list of food items from csv
             this.foodItemList = Files.lines(new File(filePath).toPath())
                     .map(x -> x.split(","))
                     .filter(x -> x.length == 12)
@@ -57,6 +57,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
                     })
                     .collect(Collectors.toList());
             this.sortFoodItems(this.foodItemList);
+            // Puts nutrients in respective BPTrees
             this.foodItemList.forEach((FoodItem foodItem) -> {
                 foodItem.getNutrients().forEach((String nutrient, Double value) -> {
                     this.indexes.get(nutrient).insert(value, foodItem);
@@ -68,6 +69,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     }
 
     private void sortFoodItems(List<FoodItem> list) {
+    	// Sorts food list by name
         list.sort(Comparator.comparing((FoodItem x) -> x.getName().toLowerCase()));
     }
     /*
@@ -76,6 +78,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public List<FoodItem> filterByName(String substring) {
+    	// Creates new list of food items based on name entered
         if (substring.trim().equals("")) {
             return this.foodItemList;
         }
@@ -92,14 +95,16 @@ public class FoodData implements FoodDataADT<FoodItem> {
     @Override
     public List<FoodItem> filterByNutrients(List<String> rules) {
         if (rules.size() == 0) {
+        	// If no rules entered
             return this.foodItemList;
         }
+        // Creates list of food items that match the rules
         List<List<FoodItem>> matches = rules.stream()
                 .map(rule -> rule.split(" "))
                 .filter(rule -> rule.length == 3)
                 .map(rule -> this.indexes.get(rule[0]).rangeSearch(Double.parseDouble(rule[2]), rule[1]))
                 .collect(Collectors.toList());
-        if (matches.size() > 0) {
+        if (matches.size() > 0) { // If list was affected
             matches.forEach(list -> matches.get(0).retainAll(list));
             sortFoodItems(matches.get(0));
             return matches.get(0);
@@ -115,13 +120,15 @@ public class FoodData implements FoodDataADT<FoodItem> {
     @Override
     public void addFoodItem(FoodItem foodItem) {
     	if (foodItemList.contains(foodItem)) {
+    		// If food is already in food List
     		return;
     	}
         foodItem.getNutrients().forEach((String nutrient, Double value) -> {
+        	// Adds nutrients to indexes
             this.indexes.get(nutrient).insert(value, foodItem);
         });
-        this.foodItemList.add(foodItem);
-        this.sortFoodItems(this.foodItemList);
+        this.foodItemList.add(foodItem); // Adds food item object
+        this.sortFoodItems(this.foodItemList); // Resorts it
     }
 
     /*
@@ -140,7 +147,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public void saveFoodItems(String filename) {
-
+    	
         ArrayList<String> list = new ArrayList<>(Arrays.stream(filename.split("-----")[0].split(",")).collect(Collectors.toList()));
         ArrayList<FoodItem> toSave = new ArrayList<>(this.foodItemList.stream().filter(x -> list.contains(x.getName())).collect(Collectors.toList()));
         try {
@@ -148,6 +155,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
                     toSave
                         .stream()
                         .map(item -> {
+                        	// Creates pieces of comma separated element
                             ArrayList<String> nutrients = new ArrayList<>();
                             nutrients.add("calories");
                             nutrients.add("" + item.getNutrientValue("calories"));
@@ -159,6 +167,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
                             nutrients.add("" + item.getNutrientValue("fiber"));
                             nutrients.add("protein");
                             nutrients.add("" + item.getNutrientValue("protein"));
+                            // Concatenates string
                             return item.getID() + "," + item.getName() + "," + String.join(",", nutrients);
                         })
                         .collect(Collectors.toList())
