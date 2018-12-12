@@ -41,6 +41,10 @@ public class Main extends Application{
 	private String filterString = "";
 	private static int foodCounter;
 
+	/**
+	 * Start method to run the entire program
+	 * @param arg0 the main stage in which the program resides
+	 */
 	@Override
 	public void start(Stage arg0) throws Exception {
 	    foodData = new FoodData();
@@ -52,6 +56,7 @@ public class Main extends Application{
 		VBox topBox = new VBox();
 		topBox.setId("topbox");
 		topBox.setBackground(new Background(new BackgroundFill(Color.rgb(13, 44, 94), null, null)));
+		// Title
 		Label title = new Label("MEAL MAKER 9000");
 		title.setId("Title");
 		topBox.setMinHeight(50);
@@ -59,22 +64,23 @@ public class Main extends Application{
 		root.setTop(topBox);
 		
 		// Center Pane ///////////
+		
 		HBox centerPane = new HBox(20);
 		centerPane.setId("centerpane");
 
 		
 		///////// FOOD LIST ////////////
+		// Setup food list box
 		VBox foodListBox = new VBox(5);
 		Label foodListLabel = new Label("FOOD LIST:");
 		foodListLabel.setId("Header");
-
+		
+		// Setup scroll-able box to view food items
 		Pane foodScroll = new Pane();
 		ObservableList<String> foodList = FXCollections.observableList(new ArrayList<String>());
 		List<FoodItem> foodItems = foodData.getAllFoodItems();
-		for (int i = 0; i < foodItems.size(); i++) {
-			foodList.add(foodItems.get(i).getName());
-		}
-		
+		foodList.addAll(foodItems.stream().map(FoodItem::getName).collect(Collectors.toList()));
+
 		ListView<String> list = new ListView<String>(foodList);
 		foodScroll.getChildren().addAll(list);
 		foodScroll.setPrefHeight(400);
