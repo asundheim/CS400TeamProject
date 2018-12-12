@@ -150,7 +150,7 @@ public class Main extends Application{
         });
         addBox.getChildren().add(addButton);
         ////////////////////////////////
-		HBox raButtonBox = new HBox(44);
+		HBox raButtonBox = new HBox(30);
 		Button removeButton = new Button("REMOVE");
 		removeButton.setOnAction(action -> {
             if (list2.getSelectionModel().getSelectedItem() != null) {
