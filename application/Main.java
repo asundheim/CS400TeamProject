@@ -79,7 +79,10 @@ public class Main extends Application{
 		Pane foodScroll = new Pane();
 		ObservableList<String> foodList = FXCollections.observableList(new ArrayList<String>());
 		List<FoodItem> foodItems = foodData.getAllFoodItems();
-        Label numFoods = new Label("Food Items: " + foodList.size());
+		String foodCount = String.format("%-3d / %-3d items shown", foodList.size(), foodData.getAllFoodItems().size());
+        Label numFoods = new Label(foodCount);
+        numFoods.setPadding(new Insets(30, 0, 0, 5));
+        numFoods.setId("Header");
 		//add all food items to the list
 		foodList.addAll(foodItems.stream().map(FoodItem::getName).collect(Collectors.toList()));
         updateFoodSize(numFoods, foodList.size());
@@ -525,6 +528,7 @@ public class Main extends Application{
 			fiberField.setText("");
 			fatField.setText("");
 			carbsField.setText("");
+			idField.setText("");
 		});
 				
 		//add everything to the appropriate boxes
@@ -550,8 +554,8 @@ public class Main extends Application{
 		arg0.show();
 	}
 
-	public void updateFoodSize(Label label, int size) {
-	    label.setText("Food items: " + size);
+	private void updateFoodSize(Label label, int size) {
+	    label.setText(String.format("%-3d / %-3d items shown", size, foodData.getAllFoodItems().size()));
     }
 	/*
 	 * initialize the program
